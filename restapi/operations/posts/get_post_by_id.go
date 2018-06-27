@@ -12,16 +12,16 @@ import (
 )
 
 // GetPostByIDHandlerFunc turns a function with the right signature into a get post by Id handler
-type GetPostByIDHandlerFunc func(GetPostByIDParams, *VivaLaPanda) middleware.Responder
+type GetPostByIDHandlerFunc func(GetPostByIDParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetPostByIDHandlerFunc) Handle(params GetPostByIDParams, principal *VivaLaPanda) middleware.Responder {
+func (fn GetPostByIDHandlerFunc) Handle(params GetPostByIDParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetPostByIDHandler interface for that can handle valid get post by Id params
 type GetPostByIDHandler interface {
-	Handle(GetPostByIDParams, *VivaLaPanda) middleware.Responder
+	Handle(GetPostByIDParams, interface{}) middleware.Responder
 }
 
 // NewGetPostByID creates a new http.Handler for the get post by Id operation
@@ -54,9 +54,9 @@ func (o *GetPostByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

@@ -12,16 +12,16 @@ import (
 )
 
 // GetUsersHandlerFunc turns a function with the right signature into a get users handler
-type GetUsersHandlerFunc func(GetUsersParams, *VivaLaPanda) middleware.Responder
+type GetUsersHandlerFunc func(GetUsersParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUsersHandlerFunc) Handle(params GetUsersParams, principal *VivaLaPanda) middleware.Responder {
+func (fn GetUsersHandlerFunc) Handle(params GetUsersParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUsersHandler interface for that can handle valid get users params
 type GetUsersHandler interface {
-	Handle(GetUsersParams, *VivaLaPanda) middleware.Responder
+	Handle(GetUsersParams, interface{}) middleware.Responder
 }
 
 // NewGetUsers creates a new http.Handler for the get users operation
@@ -54,9 +54,9 @@ func (o *GetUsers) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

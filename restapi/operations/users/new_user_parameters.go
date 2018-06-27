@@ -16,7 +16,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/VivaLaPanda/isle/api/models"
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // NewNewUserParams creates a new NewUserParams object

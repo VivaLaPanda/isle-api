@@ -21,7 +21,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	graceful "github.com/tylerb/graceful"
 
-	"github.com/VivaLaPanda/isle/api/restapi/operations"
+	"github.com/VivaLaPanda/isle-api/restapi/operations"
 )
 
 const (

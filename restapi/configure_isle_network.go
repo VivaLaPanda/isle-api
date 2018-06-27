@@ -11,13 +11,13 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
 
-	"github.com/VivaLaPanda/isle/api/restapi/operations"
-	"github.com/VivaLaPanda/isle/api/restapi/operations/comments"
-	"github.com/VivaLaPanda/isle/api/restapi/operations/posts"
-	"github.com/VivaLaPanda/isle/api/restapi/operations/users"
+	"github.com/VivaLaPanda/isle-api/restapi/operations"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/posts"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/users"
 )
 
-//go:generate swagger generate server --target .. --name isle-network-api --spec ../swagger.json --principal VivaLaPanda
+//go:generate swagger generate server --target .. --name isle-network-api --spec ../swagger.json
 
 func configureFlags(api *operations.IsleNetworkAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -37,7 +37,7 @@ func configureAPI(api *operations.IsleNetworkAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	api.ApplicationAuth = func(token string, scopes []string) (*VivaLaPanda, error) {
+	api.ApplicationAuth = func(token string, scopes []string) (interface{}, error) {
 		return nil, errors.NotImplemented("oauth2 bearer auth (application) has not yet been implemented")
 	}
 
@@ -49,40 +49,40 @@ func configureAPI(api *operations.IsleNetworkAPI) http.Handler {
 	api.GetPingHandler = operations.GetPingHandlerFunc(func(params operations.GetPingParams) middleware.Responder {
 		return middleware.NotImplemented("operation .GetPing has not yet been implemented")
 	})
-	api.CommentsGetCommentsHandler = comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *VivaLaPanda) middleware.Responder {
+	api.CommentsGetCommentsHandler = comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation comments.GetComments has not yet been implemented")
 	})
-	api.CommentsGetCommentsByIDHandler = comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *VivaLaPanda) middleware.Responder {
+	api.CommentsGetCommentsByIDHandler = comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation comments.GetCommentsByID has not yet been implemented")
 	})
-	api.PostsGetPostByIDHandler = posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *VivaLaPanda) middleware.Responder {
+	api.PostsGetPostByIDHandler = posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation posts.GetPostByID has not yet been implemented")
 	})
-	api.PostsGetPostsHandler = posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *VivaLaPanda) middleware.Responder {
+	api.PostsGetPostsHandler = posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation posts.GetPosts has not yet been implemented")
 	})
-	api.UsersGetUserByIDHandler = users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *VivaLaPanda) middleware.Responder {
+	api.UsersGetUserByIDHandler = users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation users.GetUserByID has not yet been implemented")
 	})
-	api.UsersGetUsersHandler = users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *VivaLaPanda) middleware.Responder {
+	api.UsersGetUsersHandler = users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation users.GetUsers has not yet been implemented")
 	})
-	api.CommentsNewCommentHandler = comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *VivaLaPanda) middleware.Responder {
+	api.CommentsNewCommentHandler = comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation comments.NewComment has not yet been implemented")
 	})
-	api.PostsNewPostHandler = posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *VivaLaPanda) middleware.Responder {
+	api.PostsNewPostHandler = posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation posts.NewPost has not yet been implemented")
 	})
-	api.UsersNewUserHandler = users.NewUserHandlerFunc(func(params users.NewUserParams, principal *VivaLaPanda) middleware.Responder {
+	api.UsersNewUserHandler = users.NewUserHandlerFunc(func(params users.NewUserParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation users.NewUser has not yet been implemented")
 	})
-	api.CommentsUpdateCommentHandler = comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *VivaLaPanda) middleware.Responder {
+	api.CommentsUpdateCommentHandler = comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation comments.UpdateComment has not yet been implemented")
 	})
-	api.PostsUpdatePostHandler = posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *VivaLaPanda) middleware.Responder {
+	api.PostsUpdatePostHandler = posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation posts.UpdatePost has not yet been implemented")
 	})
-	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *VivaLaPanda) middleware.Responder {
+	api.UsersUpdateUserHandler = users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal interface{}) middleware.Responder {
 		return middleware.NotImplemented("operation users.UpdateUser has not yet been implemented")
 	})
 

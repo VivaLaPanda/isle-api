@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	models "github.com/VivaLaPanda/isle/api/models"
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // NewNewCommentParams creates a new NewCommentParams object

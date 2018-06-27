@@ -19,9 +19,9 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/VivaLaPanda/isle/api/restapi/operations/comments"
-	"github.com/VivaLaPanda/isle/api/restapi/operations/posts"
-	"github.com/VivaLaPanda/isle/api/restapi/operations/users"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/posts"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/users"
 )
 
 // NewIsleNetworkAPI creates a new IsleNetwork instance
@@ -44,44 +44,44 @@ func NewIsleNetworkAPI(spec *loads.Document) *IsleNetworkAPI {
 		GetPingHandler: GetPingHandlerFunc(func(params GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPing has not yet been implemented")
 		}),
-		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *VivaLaPanda) middleware.Responder {
+		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetComments has not yet been implemented")
 		}),
-		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *VivaLaPanda) middleware.Responder {
+		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetCommentsByID has not yet been implemented")
 		}),
-		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *VivaLaPanda) middleware.Responder {
+		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPostByID has not yet been implemented")
 		}),
-		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *VivaLaPanda) middleware.Responder {
+		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPosts has not yet been implemented")
 		}),
-		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *VivaLaPanda) middleware.Responder {
+		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByID has not yet been implemented")
 		}),
-		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *VivaLaPanda) middleware.Responder {
+		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUsers has not yet been implemented")
 		}),
-		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *VivaLaPanda) middleware.Responder {
+		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsNewComment has not yet been implemented")
 		}),
-		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *VivaLaPanda) middleware.Responder {
+		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation PostsNewPost has not yet been implemented")
 		}),
-		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *VivaLaPanda) middleware.Responder {
+		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation UsersNewUser has not yet been implemented")
 		}),
-		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *VivaLaPanda) middleware.Responder {
+		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsUpdateComment has not yet been implemented")
 		}),
-		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *VivaLaPanda) middleware.Responder {
+		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation PostsUpdatePost has not yet been implemented")
 		}),
-		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *VivaLaPanda) middleware.Responder {
+		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
 		}),
 
-		ApplicationAuth: func(token string, scopes []string) (*VivaLaPanda, error) {
+		ApplicationAuth: func(token string, scopes []string) (interface{}, error) {
 			return nil, errors.NotImplemented("oauth2 bearer auth (application) has not yet been implemented")
 		},
 
@@ -120,7 +120,7 @@ type IsleNetworkAPI struct {
 
 	// ApplicationAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
-	ApplicationAuth func(string, []string) (*VivaLaPanda, error)
+	ApplicationAuth func(string, []string) (interface{}, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
@@ -291,9 +291,7 @@ func (o *IsleNetworkAPI) AuthenticatorsFor(schemes map[string]spec.SecuritySchem
 
 		case "application":
 
-			result[name] = o.BearerAuthenticator(scheme.Name, func(token string, scopes []string) (interface{}, error) {
-				return o.ApplicationAuth(token, scopes)
-			})
+			result[name] = o.BearerAuthenticator(scheme.Name, o.ApplicationAuth)
 
 		}
 	}

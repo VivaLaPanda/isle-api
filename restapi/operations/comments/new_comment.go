@@ -12,16 +12,16 @@ import (
 )
 
 // NewCommentHandlerFunc turns a function with the right signature into a new comment handler
-type NewCommentHandlerFunc func(NewCommentParams, *VivaLaPanda) middleware.Responder
+type NewCommentHandlerFunc func(NewCommentParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewCommentHandlerFunc) Handle(params NewCommentParams, principal *VivaLaPanda) middleware.Responder {
+func (fn NewCommentHandlerFunc) Handle(params NewCommentParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewCommentHandler interface for that can handle valid new comment params
 type NewCommentHandler interface {
-	Handle(NewCommentParams, *VivaLaPanda) middleware.Responder
+	Handle(NewCommentParams, interface{}) middleware.Responder
 }
 
 // NewNewComment creates a new http.Handler for the new comment operation
@@ -54,9 +54,9 @@ func (o *NewComment) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

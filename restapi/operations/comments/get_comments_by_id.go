@@ -12,16 +12,16 @@ import (
 )
 
 // GetCommentsByIDHandlerFunc turns a function with the right signature into a get comments by Id handler
-type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, *VivaLaPanda) middleware.Responder
+type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal *VivaLaPanda) middleware.Responder {
+func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetCommentsByIDHandler interface for that can handle valid get comments by Id params
 type GetCommentsByIDHandler interface {
-	Handle(GetCommentsByIDParams, *VivaLaPanda) middleware.Responder
+	Handle(GetCommentsByIDParams, interface{}) middleware.Responder
 }
 
 // NewGetCommentsByID creates a new http.Handler for the get comments by Id operation
@@ -54,9 +54,9 @@ func (o *GetCommentsByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

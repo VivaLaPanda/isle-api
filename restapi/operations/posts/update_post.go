@@ -12,16 +12,16 @@ import (
 )
 
 // UpdatePostHandlerFunc turns a function with the right signature into a update post handler
-type UpdatePostHandlerFunc func(UpdatePostParams, *VivaLaPanda) middleware.Responder
+type UpdatePostHandlerFunc func(UpdatePostParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdatePostHandlerFunc) Handle(params UpdatePostParams, principal *VivaLaPanda) middleware.Responder {
+func (fn UpdatePostHandlerFunc) Handle(params UpdatePostParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // UpdatePostHandler interface for that can handle valid update post params
 type UpdatePostHandler interface {
-	Handle(UpdatePostParams, *VivaLaPanda) middleware.Responder
+	Handle(UpdatePostParams, interface{}) middleware.Responder
 }
 
 // NewUpdatePost creates a new http.Handler for the update post operation
@@ -54,9 +54,9 @@ func (o *UpdatePost) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

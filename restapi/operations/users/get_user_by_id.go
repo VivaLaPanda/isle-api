@@ -12,16 +12,16 @@ import (
 )
 
 // GetUserByIDHandlerFunc turns a function with the right signature into a get user by Id handler
-type GetUserByIDHandlerFunc func(GetUserByIDParams, *VivaLaPanda) middleware.Responder
+type GetUserByIDHandlerFunc func(GetUserByIDParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserByIDHandlerFunc) Handle(params GetUserByIDParams, principal *VivaLaPanda) middleware.Responder {
+func (fn GetUserByIDHandlerFunc) Handle(params GetUserByIDParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUserByIDHandler interface for that can handle valid get user by Id params
 type GetUserByIDHandler interface {
-	Handle(GetUserByIDParams, *VivaLaPanda) middleware.Responder
+	Handle(GetUserByIDParams, interface{}) middleware.Responder
 }
 
 // NewGetUserByID creates a new http.Handler for the get user by Id operation
@@ -54,9 +54,9 @@ func (o *GetUserByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

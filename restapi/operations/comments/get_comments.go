@@ -12,16 +12,16 @@ import (
 )
 
 // GetCommentsHandlerFunc turns a function with the right signature into a get comments handler
-type GetCommentsHandlerFunc func(GetCommentsParams, *VivaLaPanda) middleware.Responder
+type GetCommentsHandlerFunc func(GetCommentsParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCommentsHandlerFunc) Handle(params GetCommentsParams, principal *VivaLaPanda) middleware.Responder {
+func (fn GetCommentsHandlerFunc) Handle(params GetCommentsParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetCommentsHandler interface for that can handle valid get comments params
 type GetCommentsHandler interface {
-	Handle(GetCommentsParams, *VivaLaPanda) middleware.Responder
+	Handle(GetCommentsParams, interface{}) middleware.Responder
 }
 
 // NewGetComments creates a new http.Handler for the get comments operation
@@ -54,9 +54,9 @@ func (o *GetComments) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

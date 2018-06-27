@@ -12,16 +12,16 @@ import (
 )
 
 // NewPostHandlerFunc turns a function with the right signature into a new post handler
-type NewPostHandlerFunc func(NewPostParams, *VivaLaPanda) middleware.Responder
+type NewPostHandlerFunc func(NewPostParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewPostHandlerFunc) Handle(params NewPostParams, principal *VivaLaPanda) middleware.Responder {
+func (fn NewPostHandlerFunc) Handle(params NewPostParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewPostHandler interface for that can handle valid new post params
 type NewPostHandler interface {
-	Handle(NewPostParams, *VivaLaPanda) middleware.Responder
+	Handle(NewPostParams, interface{}) middleware.Responder
 }
 
 // NewNewPost creates a new http.Handler for the new post operation
@@ -54,9 +54,9 @@ func (o *NewPost) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

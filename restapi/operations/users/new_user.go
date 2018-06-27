@@ -12,16 +12,16 @@ import (
 )
 
 // NewUserHandlerFunc turns a function with the right signature into a new user handler
-type NewUserHandlerFunc func(NewUserParams, *VivaLaPanda) middleware.Responder
+type NewUserHandlerFunc func(NewUserParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewUserHandlerFunc) Handle(params NewUserParams, principal *VivaLaPanda) middleware.Responder {
+func (fn NewUserHandlerFunc) Handle(params NewUserParams, principal interface{}) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewUserHandler interface for that can handle valid new user params
 type NewUserHandler interface {
-	Handle(NewUserParams, *VivaLaPanda) middleware.Responder
+	Handle(NewUserParams, interface{}) middleware.Responder
 }
 
 // NewNewUser creates a new http.Handler for the new user operation
@@ -54,9 +54,9 @@ func (o *NewUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *VivaLaPanda
+	var principal interface{}
 	if uprinc != nil {
-		principal = uprinc.(*VivaLaPanda) // this is really a VivaLaPanda, I promise
+		principal = uprinc
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

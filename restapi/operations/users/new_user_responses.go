@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	models "github.com/VivaLaPanda/isle/api/models"
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // NewUserCreatedCode is the HTTP code returned for type NewUserCreated
