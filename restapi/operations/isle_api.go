@@ -22,11 +22,13 @@ import (
 	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/posts"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/users"
+
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
-// NewIsleNetworkAPI creates a new IsleNetwork instance
-func NewIsleNetworkAPI(spec *loads.Document) *IsleNetworkAPI {
-	return &IsleNetworkAPI{
+// NewIsleAPI creates a new Isle instance
+func NewIsleAPI(spec *loads.Document) *IsleAPI {
+	return &IsleAPI{
 		handlers:            make(map[string]map[string]http.Handler),
 		formats:             strfmt.Default,
 		defaultConsumes:     "application/json",
@@ -41,48 +43,54 @@ func NewIsleNetworkAPI(spec *loads.Document) *IsleNetworkAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
+		GetAuthCallbackHandler: GetAuthCallbackHandlerFunc(func(params GetAuthCallbackParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetAuthCallback has not yet been implemented")
+		}),
+		GetLoginHandler: GetLoginHandlerFunc(func(params GetLoginParams) middleware.Responder {
+			return middleware.NotImplemented("operation GetLogin has not yet been implemented")
+		}),
 		GetPingHandler: GetPingHandlerFunc(func(params GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPing has not yet been implemented")
 		}),
-		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal interface{}) middleware.Responder {
+		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetComments has not yet been implemented")
 		}),
-		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal interface{}) middleware.Responder {
+		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetCommentsByID has not yet been implemented")
 		}),
-		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal interface{}) middleware.Responder {
+		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPostByID has not yet been implemented")
 		}),
-		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal interface{}) middleware.Responder {
+		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPosts has not yet been implemented")
 		}),
-		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal interface{}) middleware.Responder {
+		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByID has not yet been implemented")
 		}),
-		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal interface{}) middleware.Responder {
+		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUsers has not yet been implemented")
 		}),
-		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal interface{}) middleware.Responder {
+		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsNewComment has not yet been implemented")
 		}),
-		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal interface{}) middleware.Responder {
+		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation PostsNewPost has not yet been implemented")
 		}),
-		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal interface{}) middleware.Responder {
+		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UsersNewUser has not yet been implemented")
 		}),
-		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal interface{}) middleware.Responder {
+		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsUpdateComment has not yet been implemented")
 		}),
-		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal interface{}) middleware.Responder {
+		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation PostsUpdatePost has not yet been implemented")
 		}),
-		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal interface{}) middleware.Responder {
+		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
 		}),
 
-		ApplicationAuth: func(token string, scopes []string) (interface{}, error) {
-			return nil, errors.NotImplemented("oauth2 bearer auth (application) has not yet been implemented")
+		OauthSecurityAuth: func(token string, scopes []string) (*models.Principal, error) {
+			return nil, errors.NotImplemented("oauth2 bearer auth (OauthSecurity) has not yet been implemented")
 		},
 
 		// default authorizer is authorized meaning no requests are blocked
@@ -90,8 +98,8 @@ func NewIsleNetworkAPI(spec *loads.Document) *IsleNetworkAPI {
 	}
 }
 
-/*IsleNetworkAPI This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript */
-type IsleNetworkAPI struct {
+/*IsleAPI This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript */
+type IsleAPI struct {
 	spec            *loads.Document
 	context         *middleware.Context
 	handlers        map[string]map[string]http.Handler
@@ -118,13 +126,17 @@ type IsleNetworkAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// ApplicationAuth registers a function that takes an access token and a collection of required scopes and returns a principal
+	// OauthSecurityAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
-	ApplicationAuth func(string, []string) (interface{}, error)
+	OauthSecurityAuth func(string, []string) (*models.Principal, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
+	// GetAuthCallbackHandler sets the operation handler for the get auth callback operation
+	GetAuthCallbackHandler GetAuthCallbackHandler
+	// GetLoginHandler sets the operation handler for the get login operation
+	GetLoginHandler GetLoginHandler
 	// GetPingHandler sets the operation handler for the get ping operation
 	GetPingHandler GetPingHandler
 	// CommentsGetCommentsHandler sets the operation handler for the get comments operation
@@ -168,42 +180,42 @@ type IsleNetworkAPI struct {
 }
 
 // SetDefaultProduces sets the default produces media type
-func (o *IsleNetworkAPI) SetDefaultProduces(mediaType string) {
+func (o *IsleAPI) SetDefaultProduces(mediaType string) {
 	o.defaultProduces = mediaType
 }
 
 // SetDefaultConsumes returns the default consumes media type
-func (o *IsleNetworkAPI) SetDefaultConsumes(mediaType string) {
+func (o *IsleAPI) SetDefaultConsumes(mediaType string) {
 	o.defaultConsumes = mediaType
 }
 
 // SetSpec sets a spec that will be served for the clients.
-func (o *IsleNetworkAPI) SetSpec(spec *loads.Document) {
+func (o *IsleAPI) SetSpec(spec *loads.Document) {
 	o.spec = spec
 }
 
 // DefaultProduces returns the default produces media type
-func (o *IsleNetworkAPI) DefaultProduces() string {
+func (o *IsleAPI) DefaultProduces() string {
 	return o.defaultProduces
 }
 
 // DefaultConsumes returns the default consumes media type
-func (o *IsleNetworkAPI) DefaultConsumes() string {
+func (o *IsleAPI) DefaultConsumes() string {
 	return o.defaultConsumes
 }
 
 // Formats returns the registered string formats
-func (o *IsleNetworkAPI) Formats() strfmt.Registry {
+func (o *IsleAPI) Formats() strfmt.Registry {
 	return o.formats
 }
 
 // RegisterFormat registers a custom format validator
-func (o *IsleNetworkAPI) RegisterFormat(name string, format strfmt.Format, validator strfmt.Validator) {
+func (o *IsleAPI) RegisterFormat(name string, format strfmt.Format, validator strfmt.Validator) {
 	o.formats.Add(name, format, validator)
 }
 
-// Validate validates the registrations in the IsleNetworkAPI
-func (o *IsleNetworkAPI) Validate() error {
+// Validate validates the registrations in the IsleAPI
+func (o *IsleAPI) Validate() error {
 	var unregistered []string
 
 	if o.JSONConsumer == nil {
@@ -214,8 +226,16 @@ func (o *IsleNetworkAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.ApplicationAuth == nil {
-		unregistered = append(unregistered, "ApplicationAuth")
+	if o.OauthSecurityAuth == nil {
+		unregistered = append(unregistered, "OauthSecurityAuth")
+	}
+
+	if o.GetAuthCallbackHandler == nil {
+		unregistered = append(unregistered, "GetAuthCallbackHandler")
+	}
+
+	if o.GetLoginHandler == nil {
+		unregistered = append(unregistered, "GetLoginHandler")
 	}
 
 	if o.GetPingHandler == nil {
@@ -278,20 +298,22 @@ func (o *IsleNetworkAPI) Validate() error {
 }
 
 // ServeErrorFor gets a error handler for a given operation id
-func (o *IsleNetworkAPI) ServeErrorFor(operationID string) func(http.ResponseWriter, *http.Request, error) {
+func (o *IsleAPI) ServeErrorFor(operationID string) func(http.ResponseWriter, *http.Request, error) {
 	return o.ServeError
 }
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
-func (o *IsleNetworkAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
+func (o *IsleAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
 
 	result := make(map[string]runtime.Authenticator)
 	for name, scheme := range schemes {
 		switch name {
 
-		case "application":
+		case "OauthSecurity":
 
-			result[name] = o.BearerAuthenticator(scheme.Name, o.ApplicationAuth)
+			result[name] = o.BearerAuthenticator(scheme.Name, func(token string, scopes []string) (interface{}, error) {
+				return o.OauthSecurityAuth(token, scopes)
+			})
 
 		}
 	}
@@ -300,14 +322,14 @@ func (o *IsleNetworkAPI) AuthenticatorsFor(schemes map[string]spec.SecuritySchem
 }
 
 // Authorizer returns the registered authorizer
-func (o *IsleNetworkAPI) Authorizer() runtime.Authorizer {
+func (o *IsleAPI) Authorizer() runtime.Authorizer {
 
 	return o.APIAuthorizer
 
 }
 
 // ConsumersFor gets the consumers for the specified media types
-func (o *IsleNetworkAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consumer {
+func (o *IsleAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Consumer {
 
 	result := make(map[string]runtime.Consumer)
 	for _, mt := range mediaTypes {
@@ -327,7 +349,7 @@ func (o *IsleNetworkAPI) ConsumersFor(mediaTypes []string) map[string]runtime.Co
 }
 
 // ProducersFor gets the producers for the specified media types
-func (o *IsleNetworkAPI) ProducersFor(mediaTypes []string) map[string]runtime.Producer {
+func (o *IsleAPI) ProducersFor(mediaTypes []string) map[string]runtime.Producer {
 
 	result := make(map[string]runtime.Producer)
 	for _, mt := range mediaTypes {
@@ -347,7 +369,7 @@ func (o *IsleNetworkAPI) ProducersFor(mediaTypes []string) map[string]runtime.Pr
 }
 
 // HandlerFor gets a http.Handler for the provided operation method and path
-func (o *IsleNetworkAPI) HandlerFor(method, path string) (http.Handler, bool) {
+func (o *IsleAPI) HandlerFor(method, path string) (http.Handler, bool) {
 	if o.handlers == nil {
 		return nil, false
 	}
@@ -362,8 +384,8 @@ func (o *IsleNetworkAPI) HandlerFor(method, path string) (http.Handler, bool) {
 	return h, ok
 }
 
-// Context returns the middleware context for the isle network API
-func (o *IsleNetworkAPI) Context() *middleware.Context {
+// Context returns the middleware context for the isle API
+func (o *IsleAPI) Context() *middleware.Context {
 	if o.context == nil {
 		o.context = middleware.NewRoutableContext(o.spec, o, nil)
 	}
@@ -371,12 +393,22 @@ func (o *IsleNetworkAPI) Context() *middleware.Context {
 	return o.context
 }
 
-func (o *IsleNetworkAPI) initHandlerCache() {
+func (o *IsleAPI) initHandlerCache() {
 	o.Context() // don't care about the result, just that the initialization happened
 
 	if o.handlers == nil {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/auth/callback"] = NewGetAuthCallback(o.context, o.GetAuthCallbackHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/login"] = NewGetLogin(o.context, o.GetLoginHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -447,7 +479,7 @@ func (o *IsleNetworkAPI) initHandlerCache() {
 
 // Serve creates a http handler to serve the API over HTTP
 // can be used directly in http.ListenAndServe(":8000", api.Serve(nil))
-func (o *IsleNetworkAPI) Serve(builder middleware.Builder) http.Handler {
+func (o *IsleAPI) Serve(builder middleware.Builder) http.Handler {
 	o.Init()
 
 	if o.Middleware != nil {
@@ -457,18 +489,18 @@ func (o *IsleNetworkAPI) Serve(builder middleware.Builder) http.Handler {
 }
 
 // Init allows you to just initialize the handler cache, you can then recompose the middleware as you see fit
-func (o *IsleNetworkAPI) Init() {
+func (o *IsleAPI) Init() {
 	if len(o.handlers) == 0 {
 		o.initHandlerCache()
 	}
 }
 
 // RegisterConsumer allows you to add (or override) a consumer for a media type.
-func (o *IsleNetworkAPI) RegisterConsumer(mediaType string, consumer runtime.Consumer) {
+func (o *IsleAPI) RegisterConsumer(mediaType string, consumer runtime.Consumer) {
 	o.customConsumers[mediaType] = consumer
 }
 
 // RegisterProducer allows you to add (or override) a producer for a media type.
-func (o *IsleNetworkAPI) RegisterProducer(mediaType string, producer runtime.Producer) {
+func (o *IsleAPI) RegisterProducer(mediaType string, producer runtime.Producer) {
 	o.customProducers[mediaType] = producer
 }

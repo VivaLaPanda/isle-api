@@ -16,8 +16,8 @@ import (
 // GetPostsURL generates an URL for the get posts operation
 type GetPostsURL struct {
 	FullText *string
-	Limit    *int32
-	Offset   *int32
+	Limit    *int64
+	Offset   *int64
 	PostedBy *string
 	Tags     *string
 
@@ -65,7 +65,7 @@ func (o *GetPostsURL) Build() (*url.URL, error) {
 
 	var limit string
 	if o.Limit != nil {
-		limit = swag.FormatInt32(*o.Limit)
+		limit = swag.FormatInt64(*o.Limit)
 	}
 	if limit != "" {
 		qs.Set("limit", limit)
@@ -73,7 +73,7 @@ func (o *GetPostsURL) Build() (*url.URL, error) {
 
 	var offset string
 	if o.Offset != nil {
-		offset = swag.FormatInt32(*o.Offset)
+		offset = swag.FormatInt64(*o.Offset)
 	}
 	if offset != "" {
 		qs.Set("offset", offset)

@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // GetPostByIDHandlerFunc turns a function with the right signature into a get post by Id handler
-type GetPostByIDHandlerFunc func(GetPostByIDParams, interface{}) middleware.Responder
+type GetPostByIDHandlerFunc func(GetPostByIDParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetPostByIDHandlerFunc) Handle(params GetPostByIDParams, principal interface{}) middleware.Responder {
+func (fn GetPostByIDHandlerFunc) Handle(params GetPostByIDParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetPostByIDHandler interface for that can handle valid get post by Id params
 type GetPostByIDHandler interface {
-	Handle(GetPostByIDParams, interface{}) middleware.Responder
+	Handle(GetPostByIDParams, *models.Principal) middleware.Responder
 }
 
 // NewGetPostByID creates a new http.Handler for the get post by Id operation
@@ -54,9 +56,9 @@ func (o *GetPostByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

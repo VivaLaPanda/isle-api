@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // GetUsersHandlerFunc turns a function with the right signature into a get users handler
-type GetUsersHandlerFunc func(GetUsersParams, interface{}) middleware.Responder
+type GetUsersHandlerFunc func(GetUsersParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUsersHandlerFunc) Handle(params GetUsersParams, principal interface{}) middleware.Responder {
+func (fn GetUsersHandlerFunc) Handle(params GetUsersParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUsersHandler interface for that can handle valid get users params
 type GetUsersHandler interface {
-	Handle(GetUsersParams, interface{}) middleware.Responder
+	Handle(GetUsersParams, *models.Principal) middleware.Responder
 }
 
 // NewGetUsers creates a new http.Handler for the get users operation
@@ -54,9 +56,9 @@ func (o *GetUsers) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

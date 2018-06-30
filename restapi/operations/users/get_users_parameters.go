@@ -35,7 +35,7 @@ type GetUsersParams struct {
 	/*How many items to return at one time (max 100)
 	  In: query
 	*/
-	Limit *int32
+	Limit *int64
 	/*Search by username
 	  In: query
 	*/
@@ -43,7 +43,7 @@ type GetUsersParams struct {
 	/*What item to start listing at
 	  In: query
 	*/
-	Offset *int32
+	Offset *int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -90,9 +90,9 @@ func (o *GetUsersParams) bindLimit(rawData []string, hasKey bool, formats strfmt
 		return nil
 	}
 
-	value, err := swag.ConvertInt32(raw)
+	value, err := swag.ConvertInt64(raw)
 	if err != nil {
-		return errors.InvalidType("limit", "query", "int32", raw)
+		return errors.InvalidType("limit", "query", "int64", raw)
 	}
 	o.Limit = &value
 
@@ -128,9 +128,9 @@ func (o *GetUsersParams) bindOffset(rawData []string, hasKey bool, formats strfm
 		return nil
 	}
 
-	value, err := swag.ConvertInt32(raw)
+	value, err := swag.ConvertInt64(raw)
 	if err != nil {
-		return errors.InvalidType("offset", "query", "int32", raw)
+		return errors.InvalidType("offset", "query", "int64", raw)
 	}
 	o.Offset = &value
 

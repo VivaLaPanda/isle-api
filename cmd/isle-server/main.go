@@ -23,7 +23,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	api := operations.NewIsleNetworkAPI(swaggerSpec)
+	api := operations.NewIsleAPI(swaggerSpec)
 	server := restapi.NewServer(api)
 	defer server.Shutdown()
 

@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // GetCommentsByIDHandlerFunc turns a function with the right signature into a get comments by Id handler
-type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, interface{}) middleware.Responder
+type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal interface{}) middleware.Responder {
+func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetCommentsByIDHandler interface for that can handle valid get comments by Id params
 type GetCommentsByIDHandler interface {
-	Handle(GetCommentsByIDParams, interface{}) middleware.Responder
+	Handle(GetCommentsByIDParams, *models.Principal) middleware.Responder
 }
 
 // NewGetCommentsByID creates a new http.Handler for the get comments by Id operation
@@ -54,9 +56,9 @@ func (o *GetCommentsByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

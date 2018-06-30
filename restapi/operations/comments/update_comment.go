@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/VivaLaPanda/isle-api/models"
 )
 
 // UpdateCommentHandlerFunc turns a function with the right signature into a update comment handler
-type UpdateCommentHandlerFunc func(UpdateCommentParams, interface{}) middleware.Responder
+type UpdateCommentHandlerFunc func(UpdateCommentParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateCommentHandlerFunc) Handle(params UpdateCommentParams, principal interface{}) middleware.Responder {
+func (fn UpdateCommentHandlerFunc) Handle(params UpdateCommentParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // UpdateCommentHandler interface for that can handle valid update comment params
 type UpdateCommentHandler interface {
-	Handle(UpdateCommentParams, interface{}) middleware.Responder
+	Handle(UpdateCommentParams, *models.Principal) middleware.Responder
 }
 
 // NewUpdateComment creates a new http.Handler for the update comment operation
@@ -54,9 +56,9 @@ func (o *UpdateComment) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal interface{}
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

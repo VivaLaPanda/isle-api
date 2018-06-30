@@ -30,6 +30,23 @@ func init() {
   "host": "virtserver.swaggerhub.com",
   "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
+    "/auth/callback": {
+      "get": {
+        "security": [],
+        "summary": "return access_token",
+        "responses": {
+          "200": {
+            "description": "A successful login"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/comments": {
       "get": {
         "tags": [
@@ -40,14 +57,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -177,6 +194,23 @@ func init() {
         }
       }
     },
+    "/login": {
+      "get": {
+        "security": [],
+        "summary": "login through oauth2 server",
+        "responses": {
+          "201": {
+            "description": "A successful login"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/ping": {
       "get": {
         "security": [],
@@ -199,14 +233,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -352,14 +386,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -546,14 +580,17 @@ func init() {
       }
     },
     "Error": {
+      "type": "object",
       "required": [
-        "code",
         "message"
       ],
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
+        },
+        "fields": {
+          "type": "string"
         },
         "message": {
           "type": "string"
@@ -691,24 +728,27 @@ func init() {
       "items": {
         "$ref": "#/definitions/User"
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "securityDefinitions": {
-    "application": {
+    "OauthSecurity": {
       "type": "oauth2",
-      "flow": "application",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "scopes": {
-        "read": "allows reading resources",
-        "write": "allows modifying resources"
+        "admin": "Admin scope",
+        "user": "User scope"
       }
     }
   },
   "security": [
     {
-      "application": [
-        "read",
-        "write"
+      "OauthSecurity": [
+        "user"
       ]
     }
   ]
@@ -726,6 +766,23 @@ func init() {
   "host": "virtserver.swaggerhub.com",
   "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
+    "/auth/callback": {
+      "get": {
+        "security": [],
+        "summary": "return access_token",
+        "responses": {
+          "200": {
+            "description": "A successful login"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/comments": {
       "get": {
         "tags": [
@@ -736,14 +793,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -873,6 +930,23 @@ func init() {
         }
       }
     },
+    "/login": {
+      "get": {
+        "security": [],
+        "summary": "login through oauth2 server",
+        "responses": {
+          "201": {
+            "description": "A successful login"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/ping": {
       "get": {
         "security": [],
@@ -895,14 +969,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -1048,14 +1122,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int32",
+            "format": "int64",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -1242,14 +1316,17 @@ func init() {
       }
     },
     "Error": {
+      "type": "object",
       "required": [
-        "code",
         "message"
       ],
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int32"
+          "format": "int64"
+        },
+        "fields": {
+          "type": "string"
         },
         "message": {
           "type": "string"
@@ -1387,24 +1464,27 @@ func init() {
       "items": {
         "$ref": "#/definitions/User"
       }
+    },
+    "principal": {
+      "type": "string"
     }
   },
   "securityDefinitions": {
-    "application": {
+    "OauthSecurity": {
       "type": "oauth2",
-      "flow": "application",
+      "flow": "accessCode",
+      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "scopes": {
-        "read": "allows reading resources",
-        "write": "allows modifying resources"
+        "admin": "Admin scope",
+        "user": "User scope"
       }
     }
   },
   "security": [
     {
-      "application": [
-        "read",
-        "write"
+      "OauthSecurity": [
+        "user"
       ]
     }
   ]
