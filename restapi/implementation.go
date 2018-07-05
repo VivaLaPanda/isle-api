@@ -28,7 +28,7 @@ var (
 	userInfoURL = "https://www.googleapis.com/oauth2/v3/userinfo"
 
 	// our endpoint to be called back by the redirected client
-	callbackURL = "http://127.0.0.1:12345/api/auth/callback"
+	callbackURL = "https://127.0.0.1:12345/api/auth/callback"
 
 	// the description of the OAuth2 flow
 	endpoint = oauth2.Endpoint{

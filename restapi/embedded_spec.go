@@ -25,10 +25,10 @@ func init() {
   "info": {
     "description": "This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript",
     "title": "Isle Network",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/VivaLaPanda/Isle/1.0.0",
+  "basePath": "/api/",
   "paths": {
     "/auth/callback": {
       "get": {
@@ -761,10 +761,10 @@ func init() {
   "info": {
     "description": "This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript",
     "title": "Isle Network",
-    "version": "0.1.0"
+    "version": "0.1.1"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/VivaLaPanda/Isle/1.0.0",
+  "basePath": "/api/",
   "paths": {
     "/auth/callback": {
       "get": {

@@ -4,7 +4,7 @@ info:
   version: 0.1.1
   title: Isle Network
 host: virtserver.swaggerhub.com
-basePath: /VivaLaPanda/Isle/0.1.1
+basePath: /api/
 schemes:
   - https
 security:
