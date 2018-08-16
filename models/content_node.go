@@ -17,6 +17,10 @@ import (
 // swagger:model ContentNode
 type ContentNode struct {
 
+	// author
+	// Required: true
+	Author *string `json:"author"`
+
 	// body
 	Body string `json:"body,omitempty"`
 
@@ -54,6 +58,10 @@ type ContentNode struct {
 func (m *ContentNode) Validate(formats strfmt.Registry) error {
 	var res []error
 
+	if err := m.validateAuthor(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateChildren(formats); err != nil {
 		res = append(res, err)
 	}
@@ -77,6 +85,15 @@ func (m *ContentNode) Validate(formats strfmt.Registry) error {
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *ContentNode) validateAuthor(formats strfmt.Registry) error {
+
+	if err := validate.Required("author", "body", m.Author); err != nil {
+		return err
+	}
+
 	return nil
 }
 

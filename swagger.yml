@@ -1,99 +1,102 @@
-swagger: '2.0'
+---
+swagger: "2.0"
 info:
   description: This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript
   version: 0.1.1
   title: Isle Network
 host: virtserver.swaggerhub.com
-basePath: /api/
+basePath: /VivaLaPanda/Isle/1.0.0
 schemes:
-  - https
+- https
 security:
-  - OauthSecurity:
-    - user
+- OauthSecurity:
+  - user
 paths:
   /login:
     get:
       summary: login through oauth2 server
-      security: []
+      parameters: []
       responses:
-        '201':
+        201:
           description: A successful login
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
+      security: []
   /auth/callback:
     get:
       summary: return access_token
-      security: []
+      parameters: []
       responses:
-        '200':
+        200:
           description: A successful login
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
+      security: []
   /posts:
     get:
       tags:
-        - posts
+      - posts
       summary: Query posts
       operationId: getPosts
       parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
-          type: integer
-          format: int64
-        - name: offset
-          in: query
-          description: What item to start listing at
-          required: false
-          type: integer
-          format: int64
-        - name: tags
-          in: query
-          description: What tags to include
-          required: false
-          type: string
-        - name: fullText
-          in: query
-          description: Do a full text search of titles/body
-          required: false
-          type: string
-        - name: postedBy
-          in: query
-          description: Only show comments by a particular user
-          required: false
-          type: string
+      - name: limit
+        in: query
+        description: How many items to return at one time (max 100)
+        required: false
+        type: integer
+        format: int64
+      - name: offset
+        in: query
+        description: What item to start listing at
+        required: false
+        type: integer
+        format: int64
+      - name: tags
+        in: query
+        description: What tags to include
+        required: false
+        type: string
+      - name: fullText
+        in: query
+        description: Do a full text search of titles/body
+        required: false
+        type: string
+      - name: postedBy
+        in: query
+        description: Only show comments by a particular user
+        required: false
+        type: string
       responses:
-        '200':
+        200:
           description: An paged array of pets
-          schema:
-            $ref: '#/definitions/ContentNodes'
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/ContentNodes'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
     post:
       tags:
-        - posts
+      - posts
       summary: Create a post
       operationId: newPost
       parameters:
-        - in: body
-          name: post
-          description: The post to create
-          required: true
-          schema:
-            $ref: '#/definitions/ContentNode'
+      - in: body
+        name: post
+        description: The post to create
+        required: true
+        schema:
+          $ref: '#/definitions/ContentNode'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
@@ -101,37 +104,37 @@ paths:
             $ref: '#/definitions/Error'
     put:
       tags:
-        - posts
+      - posts
       summary: Update a post
       operationId: updatePost
       parameters:
-        - in: body
-          name: post
-          description: The data to replace the old data with
-          required: true
-          schema:
-            $ref: '#/definitions/ContentNode'
+      - in: body
+        name: post
+        description: The data to replace the old data with
+        required: true
+        schema:
+          $ref: '#/definitions/ContentNode'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  '/posts/{postId}':
+  /posts/{postId}:
     get:
       tags:
-        - posts
+      - posts
       summary: Query for a specific post
       operationId: getPostById
       parameters:
-        - name: postId
-          in: path
-          description: The id of the post to retrieve
-          required: true
-          type: string
+      - name: postId
+        in: path
+        description: The id of the post to retrieve
+        required: true
+        type: string
       responses:
-        '200':
+        200:
           description: Expected response to a valid request
           schema:
             $ref: '#/definitions/ContentNode'
@@ -142,59 +145,59 @@ paths:
   /comments:
     get:
       tags:
-        - comments
+      - comments
       summary: Query comments
       operationId: getComments
       parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
-          type: integer
-          format: int64
-        - name: offset
-          in: query
-          description: What item to start listing at
-          required: false
-          type: integer
-          format: int64
-        - name: fullText
-          in: query
-          description: Do a full text search of comment bodies
-          required: false
-          type: string
-        - name: postedBy
-          in: query
-          description: Only show comments by a particular user
-          required: false
-          type: string
+      - name: limit
+        in: query
+        description: How many items to return at one time (max 100)
+        required: false
+        type: integer
+        format: int64
+      - name: offset
+        in: query
+        description: What item to start listing at
+        required: false
+        type: integer
+        format: int64
+      - name: fullText
+        in: query
+        description: Do a full text search of comment bodies
+        required: false
+        type: string
+      - name: postedBy
+        in: query
+        description: Only show comments by a particular user
+        required: false
+        type: string
       responses:
-        '200':
+        200:
           description: An paged array of pets
-          schema:
-            $ref: '#/definitions/ContentNodes'
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/ContentNodes'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
     post:
       tags:
-        - comments
+      - comments
       summary: Create a comment
       operationId: newComment
       parameters:
-        - in: body
-          name: comment
-          description: The comment to create
-          required: true
-          schema:
-            $ref: '#/definitions/ContentNode'
+      - in: body
+        name: comment
+        description: The comment to create
+        required: true
+        schema:
+          $ref: '#/definitions/ContentNode'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
@@ -202,37 +205,37 @@ paths:
             $ref: '#/definitions/Error'
     put:
       tags:
-        - comments
+      - comments
       summary: Update a comment
       operationId: updateComment
       parameters:
-        - in: body
-          name: comment
-          description: The data to replace the old data with
-          required: true
-          schema:
-            $ref: '#/definitions/ContentNode'
+      - in: body
+        name: comment
+        description: The data to replace the old data with
+        required: true
+        schema:
+          $ref: '#/definitions/ContentNode'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  '/comments/{commentId}':
+  /comments/{commentId}:
     get:
       tags:
-        - comments
+      - comments
       summary: Query for a specific comment
       operationId: getCommentsById
       parameters:
-        - name: commentId
-          in: path
-          description: The id of the comment to retrieve
-          required: true
-          type: string
+      - name: commentId
+        in: path
+        description: The id of the comment to retrieve
+        required: true
+        type: string
       responses:
-        '200':
+        200:
           description: Expected response to a valid request
           schema:
             $ref: '#/definitions/ContentNode'
@@ -243,58 +246,58 @@ paths:
   /users:
     get:
       tags:
-        - users
+      - users
       summary: Query users
       operationId: getUsers
       parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
-          type: integer
-          format: int64
-        - name: offset
-          in: query
-          description: What item to start listing at
-          required: false
-          type: integer
-          format: int64
-        - name: name
-          in: query
-          description: Search by username
-          required: false
-          type: string
+      - name: limit
+        in: query
+        description: How many items to return at one time (max 100)
+        required: false
+        type: integer
+        format: int64
+      - name: offset
+        in: query
+        description: What item to start listing at
+        required: false
+        type: integer
+        format: int64
+      - name: name
+        in: query
+        description: Search by username
+        required: false
+        type: string
       responses:
-        '200':
+        200:
           description: An paged array of users
-          schema:
-            $ref: '#/definitions/Users'
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
+          schema:
+            $ref: '#/definitions/Users'
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
     post:
       tags:
-        - users
+      - users
       summary: Create a user
       operationId: newUser
       parameters:
-        - name: inviteCode
-          in: query
-          required: true
-          type: string
-        - in: body
-          name: user
-          description: The user to create
-          required: true
-          schema:
-            $ref: '#/definitions/ContentNode'
+      - name: inviteCode
+        in: query
+        required: true
+        type: string
+      - in: body
+        name: user
+        description: The user to create
+        required: true
+        schema:
+          $ref: '#/definitions/ContentNode'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
@@ -302,37 +305,37 @@ paths:
             $ref: '#/definitions/Error'
     put:
       tags:
-        - users
+      - users
       summary: Update a user
       operationId: updateUser
       parameters:
-        - in: body
-          name: user
-          description: The data to replace the old data with
-          required: false
-          schema:
-            $ref: '#/definitions/User'
+      - in: body
+        name: user
+        description: The data to replace the old data with
+        required: false
+        schema:
+          $ref: '#/definitions/User'
       responses:
-        '201':
+        201:
           description: Null response
         default:
           description: unexpected error
           schema:
             $ref: '#/definitions/Error'
-  '/users/{userId}':
+  /users/{userId}:
     get:
       tags:
-        - users
+      - users
       summary: Query for a specific user
       operationId: getUserById
       parameters:
-        - name: userId
-          in: path
-          description: The id of the user to retrieve
-          required: true
-          type: string
+      - name: userId
+        in: path
+        description: The id of the user to retrieve
+        required: true
+        type: string
       responses:
-        '200':
+        200:
           description: Expected response to a valid request
           schema:
             $ref: '#/definitions/User'
@@ -343,18 +346,18 @@ paths:
   /ping:
     get:
       summary: Server heartbeat operation
-      description: 'This operation shows how to override the global security defined above, as we want to open it up for all users.'
+      description: This operation shows how to override the global security defined above, as we want to open it up for all users.
       parameters: []
       responses:
-        '200':
+        200:
           description: OK
       security: []
 securityDefinitions:
   OauthSecurity:
     type: oauth2
+    authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
+    tokenUrl: https://www.googleapis.com/oauth2/v4/token
     flow: accessCode
-    authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth'
-    tokenUrl: 'https://www.googleapis.com/oauth2/v4/token'
     scopes:
       admin: Admin scope
       user: User scope
@@ -363,11 +366,12 @@ definitions:
     type: string
   ContentNode:
     required:
-      - children
-      - created
-      - score
-      - sentiment
-      - tags
+    - author
+    - children
+    - created
+    - score
+    - sentiment
+    - tags
     properties:
       uid:
         type: string
@@ -376,6 +380,8 @@ definitions:
       imageUri:
         type: string
       body:
+        type: string
+      author:
         type: string
       created:
         type: string
@@ -392,21 +398,21 @@ definitions:
       score: 0.8008281904610115
       sentiment: 6.027456183070403
       imageUri: imageUri
-      children: ''
+      children: ""
       created: created
       title: title
       body: body
-      tags: ''
+      tags: ""
   ContentNodes:
     type: array
     items:
       $ref: '#/definitions/ContentNode'
   User:
     required:
-      - email
-      - name
-      - reputation
-      - role
+    - email
+    - name
+    - reputation
+    - role
     properties:
       uid:
         type: string
@@ -444,16 +450,16 @@ definitions:
       spent: 6.027456183070403
       name: name
       reputation: 0.8008281904610115
-      commented: ''
+      commented: ""
       email: email
-      posted: ''
+      posted: ""
   Users:
     type: array
     items:
       $ref: '#/definitions/User'
   Role:
     required:
-      - text
+    - text
     properties:
       uid:
         type: string
@@ -468,7 +474,7 @@ definitions:
       $ref: '#/definitions/Tag'
   Tag:
     required:
-      - text
+    - text
     properties:
       uid:
         type: string
@@ -476,8 +482,8 @@ definitions:
         type: string
   Purchasable:
     required:
-      - cost
-      - name
+    - cost
+    - name
     properties:
       uid:
         type: string
@@ -494,7 +500,7 @@ definitions:
   Error:
     type: object
     required:
-       - message
+    - message
     properties:
       code:
         type: integer

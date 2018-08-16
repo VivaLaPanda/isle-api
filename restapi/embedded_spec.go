@@ -28,7 +28,7 @@ func init() {
     "version": "0.1.1"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/api/",
+  "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
     "/auth/callback": {
       "get": {
@@ -526,6 +526,7 @@ func init() {
   "definitions": {
     "ContentNode": {
       "required": [
+        "author",
         "children",
         "created",
         "score",
@@ -533,6 +534,9 @@ func init() {
         "tags"
       ],
       "properties": {
+        "author": {
+          "type": "string"
+        },
         "body": {
           "type": "string"
         },
@@ -764,7 +768,7 @@ func init() {
     "version": "0.1.1"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/api/",
+  "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
     "/auth/callback": {
       "get": {
@@ -1262,6 +1266,7 @@ func init() {
   "definitions": {
     "ContentNode": {
       "required": [
+        "author",
         "children",
         "created",
         "score",
@@ -1269,6 +1274,9 @@ func init() {
         "tags"
       ],
       "properties": {
+        "author": {
+          "type": "string"
+        },
         "body": {
           "type": "string"
         },
