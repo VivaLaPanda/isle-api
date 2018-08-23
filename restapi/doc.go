@@ -8,7 +8,7 @@ This is an API meant to interface with the Isle Network database to serve entiti
     Schemes:
       https
     Host: virtserver.swaggerhub.com
-    BasePath: /VivaLaPanda/Isle/1.0.0
+    BasePath: /isle/1.0.0
     Version: 1.0.0
 
     Consumes:

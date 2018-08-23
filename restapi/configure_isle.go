@@ -10,6 +10,8 @@ import (
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
+  raven "github.com/getsentry/raven-go"
+  "cloud.google.com/go/logging"
 
 	"github.com/VivaLaPanda/isle-api/restapi/operations"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
@@ -31,11 +33,15 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	// Set your custom logger if needed. Default one is log.Printf
-	// Expected interface func(string, ...interface{})
-	//
-	// Example:
-	// api.Logger = log.Printf
+	// Setting up stackdriver logging
+  ctx := context.Background()
+  client, err := logging.NewClient(ctx, "isle-network")
+  if err != nil {
+    // TODO: Handle error.
+  }
+    
+  // Init raven DSN
+  raven.SetDSN("https://3db2a3653d054e29a65c9d2e1fba710e:e2b5990690eb4dabb38b977d7f79af7b@sentry.isle.network/2")
 
 	api.JSONConsumer = runtime.JSONConsumer()
 
@@ -104,7 +110,9 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 		return middleware.NotImplemented("operation users.UpdateUser has not yet been implemented")
 	})
 
-	api.ServerShutdown = func() {}
+	api.ServerShutdown = func() {
+    
+  }
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
 }
@@ -130,5 +138,5 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return handler
+	return raven.RecoveryHandler(handler)
 }
