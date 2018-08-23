@@ -13,6 +13,8 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
+	strfmt "github.com/go-openapi/strfmt"
+
 	models "github.com/VivaLaPanda/isle-api/models"
 )
 
@@ -37,6 +39,11 @@ type UpdateCommentParams struct {
 	  In: body
 	*/
 	Comment *models.ContentNode
+	/*The id of the comment to update
+	  Required: true
+	  In: path
+	*/
+	CommentID string
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -71,8 +78,27 @@ func (o *UpdateCommentParams) BindRequest(r *http.Request, route *middleware.Mat
 	} else {
 		res = append(res, errors.Required("comment", "body"))
 	}
+	rCommentID, rhkCommentID, _ := route.Params.GetOK("commentId")
+	if err := o.bindCommentID(rCommentID, rhkCommentID, route.Formats); err != nil {
+		res = append(res, err)
+	}
+
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (o *UpdateCommentParams) bindCommentID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+	var raw string
+	if len(rawData) > 0 {
+		raw = rawData[len(rawData)-1]
+	}
+
+	// Required: true
+	// Parameter is provided by construction from the route
+
+	o.CommentID = raw
+
 	return nil
 }

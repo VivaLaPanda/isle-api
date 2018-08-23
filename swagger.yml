@@ -1,60 +1,117 @@
----
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript
-  version: 0.1.1
+  version: '1.0.0'
   title: Isle Network
-host: virtserver.swaggerhub.com
-basePath: /VivaLaPanda/Isle/1.0.0
-schemes:
-- https
+  description: This is an API meant to interface with the Isle Network
+    database to serve entities to a front-end interface. The reference server is
+    written and Go and the reference client is in Javascript
+
+ 
+# This scheme uses the header: "Authorization: Bearer {base64 encoded string representing a JWT}"
+# We do not actually follow any OAuth flow, this is used because of Swagger2's 
+# lack of "bearer". All auth is handled by Firebase on the client, and then
+# the server valdiates the generated token.
+securityDefinitions:
+  hasRole:
+    type: oauth2
+    # This should be updated to the Token URL of your OAuth provider.
+    tokenUrl: https://www.googleapis.com/oauth2/v4/token
+    flow: password
+    scopes:
+      user: can modify own resources
+      mod: user + special operations
+      admin: can modify almost anything
+
+# Here we apply the security flow called 'application' globally to all the opeartions in the spec. 
+# This security scheme is defined above in the 'securityDefinitions' section.
+# Global security can be overriden an operation level as seen in the example below
 security:
-- OauthSecurity:
-  - user
+  - hasRole:
+    - user
+    - mod
 paths:
-  /login:
+  "/roles":
     get:
-      summary: login through oauth2 server
-      parameters: []
-      responses:
-        201:
-          description: A successful login
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/Error'
-      security: []
-  /auth/callback:
-    get:
-      summary: return access_token
-      parameters: []
-      responses:
-        200:
-          description: A successful login
-        default:
-          description: unexpected error
-          schema:
-            $ref: '#/definitions/Error'
-      security: []
-  /posts:
-    get:
+      summary: Query roles
+      operationId: getRoles
       tags:
-      - posts
+        - roles
+      responses:
+        '200':
+          description: An paged array of roles
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/Role"
+        default:
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Error"
+  "/tags":
+    get:
+      summary: Query tags
+      operationId: getTags
+      tags:
+        - tags
+      responses:
+        '200':
+          description: An paged array of tags
+          schema:
+            "$ref": "#/definitions/Tags"
+        default:
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Error"
+    post:
+      summary: Make new tag
+      operationId: newTag
+      tags:
+        - tags
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Error"
+  "/tags/{tagId}":
+    put:
+      summary: Update a tag
+      operationId: updateTag
+      tags:
+        - tags
+      parameters:
+      - name: tagId
+        in: path
+        required: true
+        description: The id of the tag to update
+        type: string
+      responses:
+        '201':
+          description: Null response
+        default:
+          description: unexpected error
+          schema:
+            "$ref": "#/definitions/Error"
+  "/posts":
+    get:
       summary: Query posts
       operationId: getPosts
+      tags:
+      - posts
       parameters:
       - name: limit
         in: query
         description: How many items to return at one time (max 100)
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: offset
         in: query
         description: What item to start listing at
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: tags
         in: query
         description: What tags to include
@@ -71,307 +128,311 @@ paths:
         required: false
         type: string
       responses:
-        200:
-          description: An paged array of pets
+        '200':
+          description: An paged array of posts
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
           schema:
-            $ref: '#/definitions/ContentNodes'
+            "$ref": "#/definitions/ContentNodes"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
     post:
-      tags:
-      - posts
       summary: Create a post
       operationId: newPost
       parameters:
-      - in: body
-        name: post
-        description: The post to create
-        required: true
-        schema:
-          $ref: '#/definitions/ContentNode'
+        - in: body
+          name: post
+          description: The post to create
+          required: true
+          schema:
+            "$ref": "#/definitions/ContentNode"
+      tags:
+      - posts
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
+  "/posts/{postId}":
     put:
-      tags:
-      - posts
       summary: Update a post
       operationId: updatePost
       parameters:
-      - in: body
-        name: post
-        description: The data to replace the old data with
-        required: true
-        schema:
-          $ref: '#/definitions/ContentNode'
+        - name: postId
+          in: path
+          required: true
+          description: The id of the post to update
+          type: string
+        - in: body
+          name: post
+          description: The data to replace the old data with
+          required: true
+          schema:
+            "$ref": "#/definitions/ContentNode"
+      tags:
+      - posts
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
-  /posts/{postId}:
+            "$ref": "#/definitions/Error"
     get:
-      tags:
-      - posts
       summary: Query for a specific post
       operationId: getPostById
+      tags:
+      - posts
       parameters:
       - name: postId
         in: path
-        description: The id of the post to retrieve
         required: true
+        description: The id of the post to retrieve
         type: string
       responses:
-        200:
+        '200':
           description: Expected response to a valid request
           schema:
-            $ref: '#/definitions/ContentNode'
+            "$ref": "#/definitions/ContentNode"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
-  /comments:
+            "$ref": "#/definitions/Error"
+  "/comments":
     get:
-      tags:
-      - comments
       summary: Query comments
       operationId: getComments
+      tags:
+      - comments
       parameters:
       - name: limit
         in: query
         description: How many items to return at one time (max 100)
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: offset
         in: query
         description: What item to start listing at
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: fullText
+        required: false
         in: query
         description: Do a full text search of comment bodies
-        required: false
         type: string
       - name: postedBy
+        required: false
         in: query
         description: Only show comments by a particular user
-        required: false
         type: string
       responses:
-        200:
+        '200':
           description: An paged array of pets
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
           schema:
-            $ref: '#/definitions/ContentNodes'
+            "$ref": "#/definitions/ContentNodes"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
     post:
-      tags:
-      - comments
       summary: Create a comment
       operationId: newComment
       parameters:
-      - in: body
-        name: comment
-        description: The comment to create
-        required: true
-        schema:
-          $ref: '#/definitions/ContentNode'
+        - in: body
+          required: true
+          name: comment
+          description: The comment to create
+          schema:
+            "$ref": "#/definitions/ContentNode"
+      tags:
+      - comments
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
+  "/comments/{commentId}":
     put:
-      tags:
-      - comments
       summary: Update a comment
       operationId: updateComment
       parameters:
-      - in: body
-        name: comment
-        description: The data to replace the old data with
-        required: true
-        schema:
-          $ref: '#/definitions/ContentNode'
+        - name: commentId
+          in: path
+          required: true
+          description: The id of the comment to update
+          type: string
+        - in: body
+          required: true
+          name: comment
+          description: The data to replace the old data with
+          schema:
+            "$ref": "#/definitions/ContentNode"
+      tags:
+      - comments
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
-  /comments/{commentId}:
+            "$ref": "#/definitions/Error"
     get:
-      tags:
-      - comments
       summary: Query for a specific comment
       operationId: getCommentsById
+      tags:
+      - comments
       parameters:
       - name: commentId
         in: path
-        description: The id of the comment to retrieve
         required: true
+        description: The id of the comment to retrieve
         type: string
       responses:
-        200:
+        '200':
           description: Expected response to a valid request
           schema:
-            $ref: '#/definitions/ContentNode'
+            "$ref": "#/definitions/ContentNode"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
-  /users:
+            "$ref": "#/definitions/Error"
+  "/users":
     get:
-      tags:
-      - users
       summary: Query users
       operationId: getUsers
+      tags:
+      - users
       parameters:
       - name: limit
         in: query
         description: How many items to return at one time (max 100)
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: offset
         in: query
         description: What item to start listing at
         required: false
         type: integer
-        format: int64
+        format: int32
       - name: name
         in: query
         description: Search by username
         required: false
         type: string
       responses:
-        200:
+        '200':
           description: An paged array of users
           headers:
             x-next:
               type: string
               description: A link to the next page of responses
           schema:
-            $ref: '#/definitions/Users'
+            "$ref": "#/definitions/Users"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
     post:
-      tags:
-      - users
       summary: Create a user
       operationId: newUser
       parameters:
-      - name: inviteCode
-        in: query
-        required: true
-        type: string
-      - in: body
-        name: user
-        description: The user to create
-        required: true
-        schema:
-          $ref: '#/definitions/ContentNode'
+        - in: query
+          name: inviteCode
+          required: true
+          type: string
+        - in: body
+          name: user
+          description: The user to create
+          required: true
+          schema:
+            "$ref": "#/definitions/ContentNode"
+      tags:
+      - users
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
+  "/users/{userId}":
     put:
-      tags:
-      - users
       summary: Update a user
       operationId: updateUser
       parameters:
-      - in: body
-        name: user
-        description: The data to replace the old data with
-        required: false
-        schema:
-          $ref: '#/definitions/User'
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to update
+          type: string
+        - in: body
+          name: user
+          description: The data to replace the old data with
+          schema:
+            "$ref": "#/definitions/User"
+      tags:
+      - users
       responses:
-        201:
+        '201':
           description: Null response
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
-  /users/{userId}:
+            "$ref": "#/definitions/Error"
     get:
-      tags:
-      - users
       summary: Query for a specific user
       operationId: getUserById
+      tags:
+      - users
       parameters:
       - name: userId
         in: path
-        description: The id of the user to retrieve
         required: true
+        description: The id of the user to retrieve
         type: string
       responses:
-        200:
+        '200':
           description: Expected response to a valid request
           schema:
-            $ref: '#/definitions/User'
+            "$ref": "#/definitions/User"
         default:
           description: unexpected error
           schema:
-            $ref: '#/definitions/Error'
+            "$ref": "#/definitions/Error"
   /ping:
     get:
       summary: Server heartbeat operation
       description: This operation shows how to override the global security defined above, as we want to open it up for all users.
-      parameters: []
+      # We want to require no security schemes and override the globally define security scheme.
+      # To do that, we simply provide an empty array to the 'security' property.
+      security: [ ]
       responses:
         200:
           description: OK
-      security: []
-securityDefinitions:
-  OauthSecurity:
-    type: oauth2
-    authorizationUrl: https://accounts.google.com/o/oauth2/v2/auth
-    tokenUrl: https://www.googleapis.com/oauth2/v4/token
-    flow: accessCode
-    scopes:
-      admin: Admin scope
-      user: User scope
+          
 definitions:
-  principal:
-    type: string
   ContentNode:
     required:
-    - author
-    - children
     - created
     - score
-    - sentiment
     - tags
+    - sentiment
+    - children
     properties:
       uid:
         type: string
@@ -381,100 +442,68 @@ definitions:
         type: string
       body:
         type: string
-      author:
-        type: string
       created:
         type: string
       tags:
-        $ref: '#/definitions/Tags'
+        "$ref": "#/definitions/Tags"
       score:
         type: number
       sentiment:
         type: number
       children:
-        $ref: '#/definitions/ContentNodes'
-    example:
-      uid: uid
-      score: 0.8008281904610115
-      sentiment: 6.027456183070403
-      imageUri: imageUri
-      children: ""
-      created: created
-      title: title
-      body: body
-      tags: ""
+        "$ref": "#/definitions/ContentNodes"
   ContentNodes:
     type: array
     items:
-      $ref: '#/definitions/ContentNode'
+      "$ref": "#/definitions/ContentNode"
   User:
     required:
-    - email
-    - name
-    - reputation
-    - role
+      - name
+      - email
+      - reputation
+      - role
     properties:
       uid:
         type: string
       name:
         type: string
-      password:
-        type: string
       email:
         type: string
-      aviImgUri:
+      aviImgUri: 
         type: string
       reputation:
         type: number
       spent:
         type: number
       role:
-        $ref: '#/definitions/Role'
+        "$ref": "#/definitions/Role"
       invitedBy:
-        $ref: '#/definitions/User'
+        "$ref": "#/definitions/User"
       joined:
         type: string
       posted:
-        $ref: '#/definitions/ContentNodes'
+        "$ref": "#/definitions/ContentNodes"
       commented:
-        $ref: '#/definitions/ContentNodes'
-    example:
-      uid: uid
-      password: password
-      role:
-        uid: uid
-        text: text
-      invitedBy: null
-      aviImgUri: aviImgUri
-      joined: joined
-      spent: 6.027456183070403
-      name: name
-      reputation: 0.8008281904610115
-      commented: ""
-      email: email
-      posted: ""
+        "$ref": "#/definitions/ContentNodes"
   Users:
     type: array
     items:
-      $ref: '#/definitions/User'
+      "$ref": "#/definitions/User"
   Role:
     required:
-    - text
+      - text
     properties:
-      uid:
+      uid: 
         type: string
-      text:
+      text: 
         type: string
-    example:
-      uid: uid
-      text: text
   Tags:
     type: array
     items:
-      $ref: '#/definitions/Tag'
+      "$ref": "#/definitions/Tag"
   Tag:
     required:
-    - text
+      - text
     properties:
       uid:
         type: string
@@ -482,8 +511,8 @@ definitions:
         type: string
   Purchasable:
     required:
-    - cost
-    - name
+      - name
+      - cost
     properties:
       uid:
         type: string
@@ -496,16 +525,21 @@ definitions:
       code:
         type: string
       createdBy:
-        $ref: '#/definitions/User'
+        "$ref": "#/definitions/User"
   Error:
-    type: object
     required:
+    - code
     - message
     properties:
       code:
         type: integer
-        format: int64
+        format: int32
       message:
         type: string
-      fields:
-        type: string
+
+
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /VivaLaPanda/Isle/1.0.0
+schemes:
+ - https

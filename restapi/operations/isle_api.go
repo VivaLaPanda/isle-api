@@ -21,6 +21,8 @@ import (
 
 	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/posts"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/roles"
+	"github.com/VivaLaPanda/isle-api/restapi/operations/tags"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/users"
 
 	models "github.com/VivaLaPanda/isle-api/models"
@@ -43,54 +45,60 @@ func NewIsleAPI(spec *loads.Document) *IsleAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		GetAuthCallbackHandler: GetAuthCallbackHandlerFunc(func(params GetAuthCallbackParams) middleware.Responder {
-			return middleware.NotImplemented("operation GetAuthCallback has not yet been implemented")
-		}),
-		GetLoginHandler: GetLoginHandlerFunc(func(params GetLoginParams) middleware.Responder {
-			return middleware.NotImplemented("operation GetLogin has not yet been implemented")
-		}),
 		GetPingHandler: GetPingHandlerFunc(func(params GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPing has not yet been implemented")
 		}),
-		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.Principal) middleware.Responder {
+		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetComments has not yet been implemented")
 		}),
-		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *models.Principal) middleware.Responder {
+		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetCommentsByID has not yet been implemented")
 		}),
-		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *models.Principal) middleware.Responder {
+		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPostByID has not yet been implemented")
 		}),
-		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *models.Principal) middleware.Responder {
+		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPosts has not yet been implemented")
 		}),
-		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *models.Principal) middleware.Responder {
+		RolesGetRolesHandler: roles.GetRolesHandlerFunc(func(params roles.GetRolesParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation RolesGetRoles has not yet been implemented")
+		}),
+		TagsGetTagsHandler: tags.GetTagsHandlerFunc(func(params tags.GetTagsParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation TagsGetTags has not yet been implemented")
+		}),
+		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByID has not yet been implemented")
 		}),
-		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *models.Principal) middleware.Responder {
+		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUsers has not yet been implemented")
 		}),
-		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *models.Principal) middleware.Responder {
+		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsNewComment has not yet been implemented")
 		}),
-		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *models.Principal) middleware.Responder {
+		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsNewPost has not yet been implemented")
 		}),
-		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *models.Principal) middleware.Responder {
+		TagsNewTagHandler: tags.NewTagHandlerFunc(func(params tags.NewTagParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation TagsNewTag has not yet been implemented")
+		}),
+		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersNewUser has not yet been implemented")
 		}),
-		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *models.Principal) middleware.Responder {
+		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsUpdateComment has not yet been implemented")
 		}),
-		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *models.Principal) middleware.Responder {
+		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsUpdatePost has not yet been implemented")
 		}),
-		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		TagsUpdateTagHandler: tags.UpdateTagHandlerFunc(func(params tags.UpdateTagParams, principal *models.User) middleware.Responder {
+			return middleware.NotImplemented("operation TagsUpdateTag has not yet been implemented")
+		}),
+		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
 		}),
 
-		OauthSecurityAuth: func(token string, scopes []string) (*models.Principal, error) {
-			return nil, errors.NotImplemented("oauth2 bearer auth (OauthSecurity) has not yet been implemented")
+		HasRoleAuth: func(token string, scopes []string) (*models.User, error) {
+			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
 		},
 
 		// default authorizer is authorized meaning no requests are blocked
@@ -126,17 +134,13 @@ type IsleAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// OauthSecurityAuth registers a function that takes an access token and a collection of required scopes and returns a principal
+	// HasRoleAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
-	OauthSecurityAuth func(string, []string) (*models.Principal, error)
+	HasRoleAuth func(string, []string) (*models.User, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer
 
-	// GetAuthCallbackHandler sets the operation handler for the get auth callback operation
-	GetAuthCallbackHandler GetAuthCallbackHandler
-	// GetLoginHandler sets the operation handler for the get login operation
-	GetLoginHandler GetLoginHandler
 	// GetPingHandler sets the operation handler for the get ping operation
 	GetPingHandler GetPingHandler
 	// CommentsGetCommentsHandler sets the operation handler for the get comments operation
@@ -147,6 +151,10 @@ type IsleAPI struct {
 	PostsGetPostByIDHandler posts.GetPostByIDHandler
 	// PostsGetPostsHandler sets the operation handler for the get posts operation
 	PostsGetPostsHandler posts.GetPostsHandler
+	// RolesGetRolesHandler sets the operation handler for the get roles operation
+	RolesGetRolesHandler roles.GetRolesHandler
+	// TagsGetTagsHandler sets the operation handler for the get tags operation
+	TagsGetTagsHandler tags.GetTagsHandler
 	// UsersGetUserByIDHandler sets the operation handler for the get user by Id operation
 	UsersGetUserByIDHandler users.GetUserByIDHandler
 	// UsersGetUsersHandler sets the operation handler for the get users operation
@@ -155,12 +163,16 @@ type IsleAPI struct {
 	CommentsNewCommentHandler comments.NewCommentHandler
 	// PostsNewPostHandler sets the operation handler for the new post operation
 	PostsNewPostHandler posts.NewPostHandler
+	// TagsNewTagHandler sets the operation handler for the new tag operation
+	TagsNewTagHandler tags.NewTagHandler
 	// UsersNewUserHandler sets the operation handler for the new user operation
 	UsersNewUserHandler users.NewUserHandler
 	// CommentsUpdateCommentHandler sets the operation handler for the update comment operation
 	CommentsUpdateCommentHandler comments.UpdateCommentHandler
 	// PostsUpdatePostHandler sets the operation handler for the update post operation
 	PostsUpdatePostHandler posts.UpdatePostHandler
+	// TagsUpdateTagHandler sets the operation handler for the update tag operation
+	TagsUpdateTagHandler tags.UpdateTagHandler
 	// UsersUpdateUserHandler sets the operation handler for the update user operation
 	UsersUpdateUserHandler users.UpdateUserHandler
 
@@ -226,16 +238,8 @@ func (o *IsleAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.OauthSecurityAuth == nil {
-		unregistered = append(unregistered, "OauthSecurityAuth")
-	}
-
-	if o.GetAuthCallbackHandler == nil {
-		unregistered = append(unregistered, "GetAuthCallbackHandler")
-	}
-
-	if o.GetLoginHandler == nil {
-		unregistered = append(unregistered, "GetLoginHandler")
+	if o.HasRoleAuth == nil {
+		unregistered = append(unregistered, "HasRoleAuth")
 	}
 
 	if o.GetPingHandler == nil {
@@ -258,6 +262,14 @@ func (o *IsleAPI) Validate() error {
 		unregistered = append(unregistered, "posts.GetPostsHandler")
 	}
 
+	if o.RolesGetRolesHandler == nil {
+		unregistered = append(unregistered, "roles.GetRolesHandler")
+	}
+
+	if o.TagsGetTagsHandler == nil {
+		unregistered = append(unregistered, "tags.GetTagsHandler")
+	}
+
 	if o.UsersGetUserByIDHandler == nil {
 		unregistered = append(unregistered, "users.GetUserByIDHandler")
 	}
@@ -274,6 +286,10 @@ func (o *IsleAPI) Validate() error {
 		unregistered = append(unregistered, "posts.NewPostHandler")
 	}
 
+	if o.TagsNewTagHandler == nil {
+		unregistered = append(unregistered, "tags.NewTagHandler")
+	}
+
 	if o.UsersNewUserHandler == nil {
 		unregistered = append(unregistered, "users.NewUserHandler")
 	}
@@ -284,6 +300,10 @@ func (o *IsleAPI) Validate() error {
 
 	if o.PostsUpdatePostHandler == nil {
 		unregistered = append(unregistered, "posts.UpdatePostHandler")
+	}
+
+	if o.TagsUpdateTagHandler == nil {
+		unregistered = append(unregistered, "tags.UpdateTagHandler")
 	}
 
 	if o.UsersUpdateUserHandler == nil {
@@ -309,10 +329,10 @@ func (o *IsleAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[
 	for name, scheme := range schemes {
 		switch name {
 
-		case "OauthSecurity":
+		case "hasRole":
 
 			result[name] = o.BearerAuthenticator(scheme.Name, func(token string, scopes []string) (interface{}, error) {
-				return o.OauthSecurityAuth(token, scopes)
+				return o.HasRoleAuth(token, scopes)
 			})
 
 		}
@@ -403,16 +423,6 @@ func (o *IsleAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/auth/callback"] = NewGetAuthCallback(o.context, o.GetAuthCallbackHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/login"] = NewGetLogin(o.context, o.GetLoginHandler)
-
-	if o.handlers["GET"] == nil {
-		o.handlers["GET"] = make(map[string]http.Handler)
-	}
 	o.handlers["GET"]["/ping"] = NewGetPing(o.context, o.GetPingHandler)
 
 	if o.handlers["GET"] == nil {
@@ -438,6 +448,16 @@ func (o *IsleAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
+	o.handlers["GET"]["/roles"] = roles.NewGetRoles(o.context, o.RolesGetRolesHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/tags"] = tags.NewGetTags(o.context, o.TagsGetTagsHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
 	o.handlers["GET"]["/users/{userId}"] = users.NewGetUserByID(o.context, o.UsersGetUserByIDHandler)
 
 	if o.handlers["GET"] == nil {
@@ -458,22 +478,32 @@ func (o *IsleAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
+	o.handlers["POST"]["/tags"] = tags.NewNewTag(o.context, o.TagsNewTagHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
 	o.handlers["POST"]["/users"] = users.NewNewUser(o.context, o.UsersNewUserHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/comments"] = comments.NewUpdateComment(o.context, o.CommentsUpdateCommentHandler)
+	o.handlers["PUT"]["/comments/{commentId}"] = comments.NewUpdateComment(o.context, o.CommentsUpdateCommentHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/posts"] = posts.NewUpdatePost(o.context, o.PostsUpdatePostHandler)
+	o.handlers["PUT"]["/posts/{postId}"] = posts.NewUpdatePost(o.context, o.PostsUpdatePostHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)
 	}
-	o.handlers["PUT"]["/users"] = users.NewUpdateUser(o.context, o.UsersUpdateUserHandler)
+	o.handlers["PUT"]["/tags/{tagId}"] = tags.NewUpdateTag(o.context, o.TagsUpdateTagHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/users/{userId}"] = users.NewUpdateUser(o.context, o.UsersUpdateUserHandler)
 
 }
 

@@ -15,9 +15,9 @@ import (
 
 // GetUsersURL generates an URL for the get users operation
 type GetUsersURL struct {
-	Limit  *int64
+	Limit  *int32
 	Name   *string
-	Offset *int64
+	Offset *int32
 
 	_basePath string
 	// avoid unkeyed usage
@@ -55,7 +55,7 @@ func (o *GetUsersURL) Build() (*url.URL, error) {
 
 	var limit string
 	if o.Limit != nil {
-		limit = swag.FormatInt64(*o.Limit)
+		limit = swag.FormatInt32(*o.Limit)
 	}
 	if limit != "" {
 		qs.Set("limit", limit)
@@ -71,7 +71,7 @@ func (o *GetUsersURL) Build() (*url.URL, error) {
 
 	var offset string
 	if o.Offset != nil {
-		offset = swag.FormatInt64(*o.Offset)
+		offset = swag.FormatInt32(*o.Offset)
 	}
 	if offset != "" {
 		qs.Set("offset", offset)

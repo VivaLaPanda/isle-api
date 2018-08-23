@@ -39,11 +39,11 @@ type GetPostsParams struct {
 	/*How many items to return at one time (max 100)
 	  In: query
 	*/
-	Limit *int64
+	Limit *int32
 	/*What item to start listing at
 	  In: query
 	*/
-	Offset *int64
+	Offset *int32
 	/*Only show comments by a particular user
 	  In: query
 	*/
@@ -125,9 +125,9 @@ func (o *GetPostsParams) bindLimit(rawData []string, hasKey bool, formats strfmt
 		return nil
 	}
 
-	value, err := swag.ConvertInt64(raw)
+	value, err := swag.ConvertInt32(raw)
 	if err != nil {
-		return errors.InvalidType("limit", "query", "int64", raw)
+		return errors.InvalidType("limit", "query", "int32", raw)
 	}
 	o.Limit = &value
 
@@ -146,9 +146,9 @@ func (o *GetPostsParams) bindOffset(rawData []string, hasKey bool, formats strfm
 		return nil
 	}
 
-	value, err := swag.ConvertInt64(raw)
+	value, err := swag.ConvertInt32(raw)
 	if err != nil {
-		return errors.InvalidType("offset", "query", "int64", raw)
+		return errors.InvalidType("offset", "query", "int32", raw)
 	}
 	o.Offset = &value
 

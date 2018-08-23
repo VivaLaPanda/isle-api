@@ -9,11 +9,16 @@ import (
 	"errors"
 	"net/url"
 	golangswaggerpaths "path"
+	"strings"
 )
 
 // UpdateCommentURL generates an URL for the update comment operation
 type UpdateCommentURL struct {
+	CommentID string
+
 	_basePath string
+	// avoid unkeyed usage
+	_ struct{}
 }
 
 // WithBasePath sets the base path for this url builder, only required when it's different from the
@@ -35,7 +40,14 @@ func (o *UpdateCommentURL) SetBasePath(bp string) {
 func (o *UpdateCommentURL) Build() (*url.URL, error) {
 	var result url.URL
 
-	var _path = "/comments"
+	var _path = "/comments/{commentId}"
+
+	commentID := o.CommentID
+	if commentID != "" {
+		_path = strings.Replace(_path, "{commentId}", commentID, -1)
+	} else {
+		return nil, errors.New("CommentID is required on UpdateCommentURL")
+	}
 
 	_basePath := o._basePath
 	if _basePath == "" {

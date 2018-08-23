@@ -25,28 +25,11 @@ func init() {
   "info": {
     "description": "This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript",
     "title": "Isle Network",
-    "version": "0.1.1"
+    "version": "1.0.0"
   },
   "host": "virtserver.swaggerhub.com",
   "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
-    "/auth/callback": {
-      "get": {
-        "security": [],
-        "summary": "return access_token",
-        "responses": {
-          "200": {
-            "description": "A successful login"
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/comments": {
       "get": {
         "tags": [
@@ -57,14 +40,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -94,35 +77,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "comments"
-        ],
-        "summary": "Update a comment",
-        "operationId": "updateComment",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "comment",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ContentNode"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -192,15 +146,34 @@ func init() {
             }
           }
         }
-      }
-    },
-    "/login": {
-      "get": {
-        "security": [],
-        "summary": "login through oauth2 server",
+      },
+      "put": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Update a comment",
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the comment to update",
+            "name": "commentId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "comment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContentNode"
+            }
+          }
+        ],
         "responses": {
           "201": {
-            "description": "A successful login"
+            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -233,14 +206,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -266,7 +239,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "An paged array of pets",
+            "description": "An paged array of posts",
             "schema": {
               "$ref": "#/definitions/ContentNodes"
             },
@@ -276,35 +249,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "posts"
-        ],
-        "summary": "Update a post",
-        "operationId": "updatePost",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "post",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ContentNode"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -374,6 +318,138 @@ func init() {
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Update a post",
+        "operationId": "updatePost",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the post to update",
+            "name": "postId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "post",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContentNode"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "get": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "Query roles",
+        "operationId": "getRoles",
+        "responses": {
+          "200": {
+            "description": "An paged array of roles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Query tags",
+        "operationId": "getTags",
+        "responses": {
+          "200": {
+            "description": "An paged array of tags",
+            "schema": {
+              "$ref": "#/definitions/Tags"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Make new tag",
+        "operationId": "newTag",
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tags/{tagId}": {
+      "put": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Update a tag",
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the tag to update",
+            "name": "tagId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     },
     "/users": {
@@ -386,14 +462,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -417,34 +493,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Update a user",
-        "operationId": "updateUser",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "user",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -520,23 +568,54 @@ func init() {
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update a user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the user to update",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "user",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     }
   },
   "definitions": {
     "ContentNode": {
       "required": [
-        "author",
-        "children",
         "created",
         "score",
+        "tags",
         "sentiment",
-        "tags"
+        "children"
       ],
       "properties": {
-        "author": {
-          "type": "string"
-        },
         "body": {
           "type": "string"
         },
@@ -564,17 +643,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "body": "body",
-        "children": "",
-        "created": "created",
-        "imageUri": "imageUri",
-        "score": 0.8008281904610115,
-        "sentiment": 6.027456183070403,
-        "tags": "",
-        "title": "title",
-        "uid": "uid"
       }
     },
     "ContentNodes": {
@@ -584,17 +652,14 @@ func init() {
       }
     },
     "Error": {
-      "type": "object",
       "required": [
+        "code",
         "message"
       ],
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
-        },
-        "fields": {
-          "type": "string"
+          "format": "int32"
         },
         "message": {
           "type": "string"
@@ -613,8 +678,8 @@ func init() {
     },
     "Purchasable": {
       "required": [
-        "cost",
-        "name"
+        "name",
+        "cost"
       ],
       "properties": {
         "cost": {
@@ -639,10 +704,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "text": "text",
-        "uid": "uid"
       }
     },
     "Tag": {
@@ -666,8 +727,8 @@ func init() {
     },
     "User": {
       "required": [
-        "email",
         "name",
+        "email",
         "reputation",
         "role"
       ],
@@ -690,9 +751,6 @@ func init() {
         "name": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
-        },
         "posted": {
           "$ref": "#/definitions/ContentNodes"
         },
@@ -708,23 +766,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "aviImgUri": "aviImgUri",
-        "commented": "",
-        "email": "email",
-        "invitedBy": null,
-        "joined": "joined",
-        "name": "name",
-        "password": "password",
-        "posted": "",
-        "reputation": 0.8008281904610115,
-        "role": {
-          "text": "text",
-          "uid": "uid"
-        },
-        "spent": 6.027456183070403,
-        "uid": "uid"
       }
     },
     "Users": {
@@ -732,27 +773,25 @@ func init() {
       "items": {
         "$ref": "#/definitions/User"
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {
-    "OauthSecurity": {
+    "hasRole": {
       "type": "oauth2",
-      "flow": "accessCode",
-      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "flow": "password",
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "scopes": {
-        "admin": "Admin scope",
-        "user": "User scope"
+        "admin": "can modify almost anything",
+        "mod": "user + special operations",
+        "user": "can modify own resources"
       }
     }
   },
   "security": [
     {
-      "OauthSecurity": [
-        "user"
+      "hasRole": [
+        "user",
+        "mod"
       ]
     }
   ]
@@ -765,28 +804,11 @@ func init() {
   "info": {
     "description": "This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript",
     "title": "Isle Network",
-    "version": "0.1.1"
+    "version": "1.0.0"
   },
   "host": "virtserver.swaggerhub.com",
   "basePath": "/VivaLaPanda/Isle/1.0.0",
   "paths": {
-    "/auth/callback": {
-      "get": {
-        "security": [],
-        "summary": "return access_token",
-        "responses": {
-          "200": {
-            "description": "A successful login"
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
     "/comments": {
       "get": {
         "tags": [
@@ -797,14 +819,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -834,35 +856,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "comments"
-        ],
-        "summary": "Update a comment",
-        "operationId": "updateComment",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "comment",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ContentNode"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -932,15 +925,34 @@ func init() {
             }
           }
         }
-      }
-    },
-    "/login": {
-      "get": {
-        "security": [],
-        "summary": "login through oauth2 server",
+      },
+      "put": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "Update a comment",
+        "operationId": "updateComment",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the comment to update",
+            "name": "commentId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "comment",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContentNode"
+            }
+          }
+        ],
         "responses": {
           "201": {
-            "description": "A successful login"
+            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -973,14 +985,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -1006,7 +1018,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "An paged array of pets",
+            "description": "An paged array of posts",
             "schema": {
               "$ref": "#/definitions/ContentNodes"
             },
@@ -1016,35 +1028,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "posts"
-        ],
-        "summary": "Update a post",
-        "operationId": "updatePost",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "post",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/ContentNode"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -1114,6 +1097,138 @@ func init() {
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "Update a post",
+        "operationId": "updatePost",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the post to update",
+            "name": "postId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "post",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ContentNode"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "get": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "Query roles",
+        "operationId": "getRoles",
+        "responses": {
+          "200": {
+            "description": "An paged array of roles",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Query tags",
+        "operationId": "getTags",
+        "responses": {
+          "200": {
+            "description": "An paged array of tags",
+            "schema": {
+              "$ref": "#/definitions/Tags"
+            }
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Make new tag",
+        "operationId": "newTag",
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/tags/{tagId}": {
+      "put": {
+        "tags": [
+          "tags"
+        ],
+        "summary": "Update a tag",
+        "operationId": "updateTag",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the tag to update",
+            "name": "tagId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     },
     "/users": {
@@ -1126,14 +1241,14 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "How many items to return at one time (max 100)",
             "name": "limit",
             "in": "query"
           },
           {
             "type": "integer",
-            "format": "int64",
+            "format": "int32",
             "description": "What item to start listing at",
             "name": "offset",
             "in": "query"
@@ -1157,34 +1272,6 @@ func init() {
                 "description": "A link to the next page of responses"
               }
             }
-          },
-          "default": {
-            "description": "unexpected error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Update a user",
-        "operationId": "updateUser",
-        "parameters": [
-          {
-            "description": "The data to replace the old data with",
-            "name": "user",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/User"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Null response"
           },
           "default": {
             "description": "unexpected error",
@@ -1260,23 +1347,54 @@ func init() {
             }
           }
         }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update a user",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The id of the user to update",
+            "name": "userId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The data to replace the old data with",
+            "name": "user",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Null response"
+          },
+          "default": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     }
   },
   "definitions": {
     "ContentNode": {
       "required": [
-        "author",
-        "children",
         "created",
         "score",
+        "tags",
         "sentiment",
-        "tags"
+        "children"
       ],
       "properties": {
-        "author": {
-          "type": "string"
-        },
         "body": {
           "type": "string"
         },
@@ -1304,17 +1422,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "body": "body",
-        "children": "",
-        "created": "created",
-        "imageUri": "imageUri",
-        "score": 0.8008281904610115,
-        "sentiment": 6.027456183070403,
-        "tags": "",
-        "title": "title",
-        "uid": "uid"
       }
     },
     "ContentNodes": {
@@ -1324,17 +1431,14 @@ func init() {
       }
     },
     "Error": {
-      "type": "object",
       "required": [
+        "code",
         "message"
       ],
       "properties": {
         "code": {
           "type": "integer",
-          "format": "int64"
-        },
-        "fields": {
-          "type": "string"
+          "format": "int32"
         },
         "message": {
           "type": "string"
@@ -1353,8 +1457,8 @@ func init() {
     },
     "Purchasable": {
       "required": [
-        "cost",
-        "name"
+        "name",
+        "cost"
       ],
       "properties": {
         "cost": {
@@ -1379,10 +1483,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "text": "text",
-        "uid": "uid"
       }
     },
     "Tag": {
@@ -1406,8 +1506,8 @@ func init() {
     },
     "User": {
       "required": [
-        "email",
         "name",
+        "email",
         "reputation",
         "role"
       ],
@@ -1430,9 +1530,6 @@ func init() {
         "name": {
           "type": "string"
         },
-        "password": {
-          "type": "string"
-        },
         "posted": {
           "$ref": "#/definitions/ContentNodes"
         },
@@ -1448,23 +1545,6 @@ func init() {
         "uid": {
           "type": "string"
         }
-      },
-      "example": {
-        "aviImgUri": "aviImgUri",
-        "commented": "",
-        "email": "email",
-        "invitedBy": null,
-        "joined": "joined",
-        "name": "name",
-        "password": "password",
-        "posted": "",
-        "reputation": 0.8008281904610115,
-        "role": {
-          "text": "text",
-          "uid": "uid"
-        },
-        "spent": 6.027456183070403,
-        "uid": "uid"
       }
     },
     "Users": {
@@ -1472,27 +1552,25 @@ func init() {
       "items": {
         "$ref": "#/definitions/User"
       }
-    },
-    "principal": {
-      "type": "string"
     }
   },
   "securityDefinitions": {
-    "OauthSecurity": {
+    "hasRole": {
       "type": "oauth2",
-      "flow": "accessCode",
-      "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+      "flow": "password",
       "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
       "scopes": {
-        "admin": "Admin scope",
-        "user": "User scope"
+        "admin": "can modify almost anything",
+        "mod": "user + special operations",
+        "user": "can modify own resources"
       }
     }
   },
   "security": [
     {
-      "OauthSecurity": [
-        "user"
+      "hasRole": [
+        "user",
+        "mod"
       ]
     }
   ]

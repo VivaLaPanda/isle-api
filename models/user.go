@@ -37,9 +37,6 @@ type User struct {
 	// Required: true
 	Name *string `json:"name"`
 
-	// password
-	Password string `json:"password,omitempty"`
-
 	// posted
 	Posted ContentNodes `json:"posted"`
 

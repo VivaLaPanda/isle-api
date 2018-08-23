@@ -16,7 +16,7 @@ import (
 // GetPostsOKCode is the HTTP code returned for type GetPostsOK
 const GetPostsOKCode int = 200
 
-/*GetPostsOK An paged array of pets
+/*GetPostsOK An paged array of posts
 
 swagger:response getPostsOK
 */
