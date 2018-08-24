@@ -45,7 +45,7 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 	ctx := context.Background()
 	logClient, err := logging.NewClient(ctx, "isle-network")
 	if err != nil {
-		// TODO: Handle error.
+		panic("Failed to initialize Stackdriver")
 	}
 	// Sets the name of the log to write to.
 	logName := "isle-server"
