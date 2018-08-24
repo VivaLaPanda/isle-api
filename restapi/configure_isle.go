@@ -3,15 +3,16 @@
 package restapi
 
 import (
+	"context"
 	"crypto/tls"
 	"net/http"
 
+	"cloud.google.com/go/logging"
+	raven "github.com/getsentry/raven-go"
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
-  raven "github.com/getsentry/raven-go"
-  "cloud.google.com/go/logging"
 
 	"github.com/VivaLaPanda/isle-api/restapi/operations"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
@@ -34,21 +35,30 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 	api.ServeError = errors.ServeError
 
 	// Setting up stackdriver logging
-  ctx := context.Background()
-  client, err := logging.NewClient(ctx, "isle-network")
-  if err != nil {
-    // TODO: Handle error.
-  }
-    
-  // Init raven DSN
-  raven.SetDSN("https://3db2a3653d054e29a65c9d2e1fba710e:e2b5990690eb4dabb38b977d7f79af7b@sentry.isle.network/2")
+	ctx := context.Background()
+	logClient, err := logging.NewClient(ctx, "isle-network")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// Sets the name of the log to write to.
+	logName := "isle-server"
+	// Selects the log to write to.
+	logger := logClient.Logger(logName)
+	stdLogger := func(f string, args ...interface{}) {
+		stdlg := logger.StandardLogger(logging.Info)
+		stdlg.Printf(f, args)
+	}
+	api.Logger = stdLogger
+
+	// Init raven DSN
+	raven.SetDSN("https://3db2a3653d054e29a65c9d2e1fba710e:e2b5990690eb4dabb38b977d7f79af7b@sentry.isle.network/2")
 
 	api.JSONConsumer = runtime.JSONConsumer()
 
 	api.JSONProducer = runtime.JSONProducer()
 
-  // Will validate the Firebase JWT, get the token data. Data contains uid and claims
-  // We validate the claims against the scope, if we succeed we use the firebase uid
+	// Will validate the Firebase JWT, get the token data. Data contains uid and claims
+	// We validate the claims against the scope, if we succeed we use the firebase uid
 	api.HasRoleAuth = func(token string, scopes []string) (*models.User, error) {
 		return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
 	}
@@ -111,8 +121,8 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 	})
 
 	api.ServerShutdown = func() {
-    
-  }
+
+	}
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
 }
@@ -138,5 +148,5 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return raven.RecoveryHandler(handler)
+	return http.HandlerFunc(raven.RecoveryHandler(handler.ServeHTTP))
 }
