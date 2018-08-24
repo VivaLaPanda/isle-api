@@ -28,7 +28,7 @@ func init() {
     "version": "1.0.0"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/isle/1.0.0",
+  "basePath": "/api",
   "paths": {
     "/comments": {
       "get": {
@@ -807,7 +807,7 @@ func init() {
     "version": "1.0.0"
   },
   "host": "virtserver.swaggerhub.com",
-  "basePath": "/isle/1.0.0",
+  "basePath": "/api",
   "paths": {
     "/comments": {
       "get": {

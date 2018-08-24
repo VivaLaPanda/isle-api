@@ -5,14 +5,18 @@ package restapi
 import (
 	"context"
 	"crypto/tls"
+	"log"
 	"net/http"
 
 	"cloud.google.com/go/logging"
+	"github.com/dgraph-io/dgo"
+	"github.com/dgraph-io/dgo/protos/api"
 	raven "github.com/getsentry/raven-go"
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 	graceful "github.com/tylerb/graceful"
+	"google.golang.org/grpc"
 
 	"github.com/VivaLaPanda/isle-api/restapi/operations"
 	"github.com/VivaLaPanda/isle-api/restapi/operations/comments"
@@ -25,6 +29,9 @@ import (
 )
 
 //go:generate swagger generate server --target .. --name IsleApi --spec ../swagger.yml --principal models.User
+
+// Global threadsafe database object
+var db *dgo.Dgraph
 
 func configureFlags(api *operations.IsleAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
@@ -48,6 +55,7 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 		stdlg := logger.StandardLogger(logging.Info)
 		stdlg.Printf(f, args)
 	}
+	log.Println("API logging is now being handed over to Stackdriver.")
 	api.Logger = stdLogger
 
 	// Init raven DSN
@@ -69,7 +77,7 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 	// Example:
 	// api.APIAuthorizer = security.Authorized()
 	api.GetPingHandler = operations.GetPingHandlerFunc(func(params operations.GetPingParams) middleware.Responder {
-		return middleware.NotImplemented("operation .GetPing has not yet been implemented")
+		return operations.NewGetPingOK()
 	})
 	api.CommentsGetCommentsHandler = comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.User) middleware.Responder {
 		return middleware.NotImplemented("operation comments.GetComments has not yet been implemented")
@@ -137,6 +145,19 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *graceful.Server, scheme, addr string) {
+	// Set up our DGraph server
+	// Dial a gRPC connection. The address to dial to can be configured when
+	// setting up the dgraph cluster.
+	d, err := grpc.Dial("dgraph.isle.network:9080", grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+	db = dgo.NewDgraphClient(
+		api.NewDgraphClient(d),
+	)
+	log.Println("DB Client created. Writing schema.")
+	writeSchema()
+	log.Println("Schema successfully written.")
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

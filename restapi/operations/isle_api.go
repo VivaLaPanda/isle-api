@@ -48,56 +48,56 @@ func NewIsleAPI(spec *loads.Document) *IsleAPI {
 		GetPingHandler: GetPingHandlerFunc(func(params GetPingParams) middleware.Responder {
 			return middleware.NotImplemented("operation GetPing has not yet been implemented")
 		}),
-		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.Principal) middleware.Responder {
+		CommentsGetCommentsHandler: comments.GetCommentsHandlerFunc(func(params comments.GetCommentsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetComments has not yet been implemented")
 		}),
-		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *models.Principal) middleware.Responder {
+		CommentsGetCommentsByIDHandler: comments.GetCommentsByIDHandlerFunc(func(params comments.GetCommentsByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsGetCommentsByID has not yet been implemented")
 		}),
-		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *models.Principal) middleware.Responder {
+		PostsGetPostByIDHandler: posts.GetPostByIDHandlerFunc(func(params posts.GetPostByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPostByID has not yet been implemented")
 		}),
-		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *models.Principal) middleware.Responder {
+		PostsGetPostsHandler: posts.GetPostsHandlerFunc(func(params posts.GetPostsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsGetPosts has not yet been implemented")
 		}),
-		RolesGetRolesHandler: roles.GetRolesHandlerFunc(func(params roles.GetRolesParams, principal *models.Principal) middleware.Responder {
+		RolesGetRolesHandler: roles.GetRolesHandlerFunc(func(params roles.GetRolesParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation RolesGetRoles has not yet been implemented")
 		}),
-		TagsGetTagsHandler: tags.GetTagsHandlerFunc(func(params tags.GetTagsParams, principal *models.Principal) middleware.Responder {
+		TagsGetTagsHandler: tags.GetTagsHandlerFunc(func(params tags.GetTagsParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation TagsGetTags has not yet been implemented")
 		}),
-		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *models.Principal) middleware.Responder {
+		UsersGetUserByIDHandler: users.GetUserByIDHandlerFunc(func(params users.GetUserByIDParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUserByID has not yet been implemented")
 		}),
-		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *models.Principal) middleware.Responder {
+		UsersGetUsersHandler: users.GetUsersHandlerFunc(func(params users.GetUsersParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersGetUsers has not yet been implemented")
 		}),
-		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *models.Principal) middleware.Responder {
+		CommentsNewCommentHandler: comments.NewCommentHandlerFunc(func(params comments.NewCommentParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsNewComment has not yet been implemented")
 		}),
-		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *models.Principal) middleware.Responder {
+		PostsNewPostHandler: posts.NewPostHandlerFunc(func(params posts.NewPostParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsNewPost has not yet been implemented")
 		}),
-		TagsNewTagHandler: tags.NewTagHandlerFunc(func(params tags.NewTagParams, principal *models.Principal) middleware.Responder {
+		TagsNewTagHandler: tags.NewTagHandlerFunc(func(params tags.NewTagParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation TagsNewTag has not yet been implemented")
 		}),
-		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *models.Principal) middleware.Responder {
+		UsersNewUserHandler: users.NewUserHandlerFunc(func(params users.NewUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersNewUser has not yet been implemented")
 		}),
-		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *models.Principal) middleware.Responder {
+		CommentsUpdateCommentHandler: comments.UpdateCommentHandlerFunc(func(params comments.UpdateCommentParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation CommentsUpdateComment has not yet been implemented")
 		}),
-		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *models.Principal) middleware.Responder {
+		PostsUpdatePostHandler: posts.UpdatePostHandlerFunc(func(params posts.UpdatePostParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation PostsUpdatePost has not yet been implemented")
 		}),
-		TagsUpdateTagHandler: tags.UpdateTagHandlerFunc(func(params tags.UpdateTagParams, principal *models.Principal) middleware.Responder {
+		TagsUpdateTagHandler: tags.UpdateTagHandlerFunc(func(params tags.UpdateTagParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation TagsUpdateTag has not yet been implemented")
 		}),
-		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *models.Principal) middleware.Responder {
+		UsersUpdateUserHandler: users.UpdateUserHandlerFunc(func(params users.UpdateUserParams, principal *models.User) middleware.Responder {
 			return middleware.NotImplemented("operation UsersUpdateUser has not yet been implemented")
 		}),
 
-		HasRoleAuth: func(token string, scopes []string) (*models.Principal, error) {
+		HasRoleAuth: func(token string, scopes []string) (*models.User, error) {
 			return nil, errors.NotImplemented("oauth2 bearer auth (hasRole) has not yet been implemented")
 		},
 
@@ -136,7 +136,7 @@ type IsleAPI struct {
 
 	// HasRoleAuth registers a function that takes an access token and a collection of required scopes and returns a principal
 	// it performs authentication based on an oauth2 bearer token provided in the request
-	HasRoleAuth func(string, []string) (*models.Principal, error)
+	HasRoleAuth func(string, []string) (*models.User, error)
 
 	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
 	APIAuthorizer runtime.Authorizer

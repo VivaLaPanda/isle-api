@@ -13,3 +13,4 @@
 
 # Server secrets
 secrets.go
+stackdriver-cred.json

@@ -541,6 +541,6 @@ definitions:
 #
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
-basePath: /isle/1.0.0
+basePath: /api
 schemes:
  - http

@@ -14,16 +14,16 @@ import (
 )
 
 // GetCommentsByIDHandlerFunc turns a function with the right signature into a get comments by Id handler
-type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, *models.Principal) middleware.Responder
+type GetCommentsByIDHandlerFunc func(GetCommentsByIDParams, *models.User) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal *models.Principal) middleware.Responder {
+func (fn GetCommentsByIDHandlerFunc) Handle(params GetCommentsByIDParams, principal *models.User) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetCommentsByIDHandler interface for that can handle valid get comments by Id params
 type GetCommentsByIDHandler interface {
-	Handle(GetCommentsByIDParams, *models.Principal) middleware.Responder
+	Handle(GetCommentsByIDParams, *models.User) middleware.Responder
 }
 
 // NewGetCommentsByID creates a new http.Handler for the get comments by Id operation
@@ -56,9 +56,9 @@ func (o *GetCommentsByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.User
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.User) // this is really a models.User, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

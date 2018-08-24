@@ -4,8 +4,7 @@ Package restapi Isle Network
 This is an API meant to interface with the Isle Network database to serve entities
 to a front-end interface. The reference server is written and Go and the reference client is in Javascript
 
-To regenerate server files after a change in the SwaggerFile: `./swagger.exe generate server -A IsleApi -P models.Principa
-l -f ./swagger.yml`
+To regenerate server files after a change in the SwaggerFile: `./swagger.exe generate server -A IsleApi -P models.User -f ./swagger.yml`
 
 confgure_isle.go will not be overwritten.
 

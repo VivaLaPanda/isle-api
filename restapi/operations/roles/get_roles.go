@@ -14,16 +14,16 @@ import (
 )
 
 // GetRolesHandlerFunc turns a function with the right signature into a get roles handler
-type GetRolesHandlerFunc func(GetRolesParams, *models.Principal) middleware.Responder
+type GetRolesHandlerFunc func(GetRolesParams, *models.User) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetRolesHandlerFunc) Handle(params GetRolesParams, principal *models.Principal) middleware.Responder {
+func (fn GetRolesHandlerFunc) Handle(params GetRolesParams, principal *models.User) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetRolesHandler interface for that can handle valid get roles params
 type GetRolesHandler interface {
-	Handle(GetRolesParams, *models.Principal) middleware.Responder
+	Handle(GetRolesParams, *models.User) middleware.Responder
 }
 
 // NewGetRoles creates a new http.Handler for the get roles operation
@@ -56,9 +56,9 @@ func (o *GetRoles) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.Principal
+	var principal *models.User
 	if uprinc != nil {
-		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+		principal = uprinc.(*models.User) // this is really a models.User, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
