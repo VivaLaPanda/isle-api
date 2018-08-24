@@ -21,6 +21,9 @@ type Invite struct {
 
 	// created by
 	CreatedBy *User `json:"createdBy,omitempty"`
+
+	// uid
+	UID string `json:"uid,omitempty"`
 }
 
 // Validate validates this invite

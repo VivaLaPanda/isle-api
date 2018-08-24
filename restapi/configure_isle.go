@@ -56,7 +56,7 @@ func configureAPI(api *operations.IsleAPI) http.Handler {
 		stdlg.Printf(f, args)
 	}
 	log.Println("API logging is now being handed over to Stackdriver.")
-	api.Logger = stdLogger
+	//api.Logger = stdLogger
 
 	// Init raven DSN
 	raven.SetDSN("https://3db2a3653d054e29a65c9d2e1fba710e:e2b5990690eb4dabb38b977d7f79af7b@sentry.isle.network/2")

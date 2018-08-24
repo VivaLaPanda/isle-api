@@ -522,6 +522,8 @@ definitions:
         type: number
   Invite:
     properties:
+      uid:
+        type: string
       code:
         type: string
       createdBy:

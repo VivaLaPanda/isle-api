@@ -673,6 +673,9 @@ func init() {
         },
         "createdBy": {
           "$ref": "#/definitions/User"
+        },
+        "uid": {
+          "type": "string"
         }
       }
     },
@@ -1452,6 +1455,9 @@ func init() {
         },
         "createdBy": {
           "$ref": "#/definitions/User"
+        },
+        "uid": {
+          "type": "string"
         }
       }
     },
