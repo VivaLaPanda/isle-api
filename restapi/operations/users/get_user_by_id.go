@@ -14,16 +14,16 @@ import (
 )
 
 // GetUserByIDHandlerFunc turns a function with the right signature into a get user by Id handler
-type GetUserByIDHandlerFunc func(GetUserByIDParams, *models.User) middleware.Responder
+type GetUserByIDHandlerFunc func(GetUserByIDParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserByIDHandlerFunc) Handle(params GetUserByIDParams, principal *models.User) middleware.Responder {
+func (fn GetUserByIDHandlerFunc) Handle(params GetUserByIDParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetUserByIDHandler interface for that can handle valid get user by Id params
 type GetUserByIDHandler interface {
-	Handle(GetUserByIDParams, *models.User) middleware.Responder
+	Handle(GetUserByIDParams, *models.Principal) middleware.Responder
 }
 
 // NewGetUserByID creates a new http.Handler for the get user by Id operation
@@ -56,9 +56,9 @@ func (o *GetUserByID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

@@ -14,16 +14,16 @@ import (
 )
 
 // NewUserHandlerFunc turns a function with the right signature into a new user handler
-type NewUserHandlerFunc func(NewUserParams, *models.User) middleware.Responder
+type NewUserHandlerFunc func(NewUserParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewUserHandlerFunc) Handle(params NewUserParams, principal *models.User) middleware.Responder {
+func (fn NewUserHandlerFunc) Handle(params NewUserParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewUserHandler interface for that can handle valid new user params
 type NewUserHandler interface {
-	Handle(NewUserParams, *models.User) middleware.Responder
+	Handle(NewUserParams, *models.Principal) middleware.Responder
 }
 
 // NewNewUser creates a new http.Handler for the new user operation
@@ -56,9 +56,9 @@ func (o *NewUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

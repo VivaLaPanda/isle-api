@@ -14,16 +14,16 @@ import (
 )
 
 // NewCommentHandlerFunc turns a function with the right signature into a new comment handler
-type NewCommentHandlerFunc func(NewCommentParams, *models.User) middleware.Responder
+type NewCommentHandlerFunc func(NewCommentParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewCommentHandlerFunc) Handle(params NewCommentParams, principal *models.User) middleware.Responder {
+func (fn NewCommentHandlerFunc) Handle(params NewCommentParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewCommentHandler interface for that can handle valid new comment params
 type NewCommentHandler interface {
-	Handle(NewCommentParams, *models.User) middleware.Responder
+	Handle(NewCommentParams, *models.Principal) middleware.Responder
 }
 
 // NewNewComment creates a new http.Handler for the new comment operation
@@ -56,9 +56,9 @@ func (o *NewComment) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

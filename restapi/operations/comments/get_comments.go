@@ -14,16 +14,16 @@ import (
 )
 
 // GetCommentsHandlerFunc turns a function with the right signature into a get comments handler
-type GetCommentsHandlerFunc func(GetCommentsParams, *models.User) middleware.Responder
+type GetCommentsHandlerFunc func(GetCommentsParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCommentsHandlerFunc) Handle(params GetCommentsParams, principal *models.User) middleware.Responder {
+func (fn GetCommentsHandlerFunc) Handle(params GetCommentsParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // GetCommentsHandler interface for that can handle valid get comments params
 type GetCommentsHandler interface {
-	Handle(GetCommentsParams, *models.User) middleware.Responder
+	Handle(GetCommentsParams, *models.Principal) middleware.Responder
 }
 
 // NewGetComments creates a new http.Handler for the get comments operation
@@ -56,9 +56,9 @@ func (o *GetComments) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

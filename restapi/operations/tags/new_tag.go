@@ -14,16 +14,16 @@ import (
 )
 
 // NewTagHandlerFunc turns a function with the right signature into a new tag handler
-type NewTagHandlerFunc func(NewTagParams, *models.User) middleware.Responder
+type NewTagHandlerFunc func(NewTagParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn NewTagHandlerFunc) Handle(params NewTagParams, principal *models.User) middleware.Responder {
+func (fn NewTagHandlerFunc) Handle(params NewTagParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // NewTagHandler interface for that can handle valid new tag params
 type NewTagHandler interface {
-	Handle(NewTagParams, *models.User) middleware.Responder
+	Handle(NewTagParams, *models.Principal) middleware.Responder
 }
 
 // NewNewTag creates a new http.Handler for the new tag operation
@@ -56,9 +56,9 @@ func (o *NewTag) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

@@ -6,7 +6,7 @@ This is an API meant to interface with the Isle Network database to serve entiti
 
 
     Schemes:
-      https
+      http
     Host: virtserver.swaggerhub.com
     BasePath: /isle/1.0.0
     Version: 1.0.0

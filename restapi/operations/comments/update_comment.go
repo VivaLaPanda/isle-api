@@ -14,16 +14,16 @@ import (
 )
 
 // UpdateCommentHandlerFunc turns a function with the right signature into a update comment handler
-type UpdateCommentHandlerFunc func(UpdateCommentParams, *models.User) middleware.Responder
+type UpdateCommentHandlerFunc func(UpdateCommentParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateCommentHandlerFunc) Handle(params UpdateCommentParams, principal *models.User) middleware.Responder {
+func (fn UpdateCommentHandlerFunc) Handle(params UpdateCommentParams, principal *models.Principal) middleware.Responder {
 	return fn(params, principal)
 }
 
 // UpdateCommentHandler interface for that can handle valid update comment params
 type UpdateCommentHandler interface {
-	Handle(UpdateCommentParams, *models.User) middleware.Responder
+	Handle(UpdateCommentParams, *models.Principal) middleware.Responder
 }
 
 // NewUpdateComment creates a new http.Handler for the update comment operation
@@ -56,9 +56,9 @@ func (o *UpdateComment) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	if aCtx != nil {
 		r = aCtx
 	}
-	var principal *models.User
+	var principal *models.Principal
 	if uprinc != nil {
-		principal = uprinc.(*models.User) // this is really a models.User, I promise
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
 	}
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params

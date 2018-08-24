@@ -6,9 +6,9 @@ info:
     database to serve entities to a front-end interface. The reference server is
     written and Go and the reference client is in Javascript
 
- 
+
 # This scheme uses the header: "Authorization: Bearer {base64 encoded string representing a JWT}"
-# We do not actually follow any OAuth flow, this is used because of Swagger2's 
+# We do not actually follow any OAuth flow, this is used because of Swagger2's
 # lack of "bearer". All auth is handled by Firebase on the client, and then
 # the server valdiates the generated token.
 securityDefinitions:
@@ -22,7 +22,7 @@ securityDefinitions:
       mod: user + special operations
       admin: can modify almost anything
 
-# Here we apply the security flow called 'application' globally to all the opeartions in the spec. 
+# Here we apply the security flow called 'application' globally to all the opeartions in the spec.
 # This security scheme is defined above in the 'securityDefinitions' section.
 # Global security can be overriden an operation level as seen in the example below
 security:
@@ -424,7 +424,7 @@ paths:
       responses:
         200:
           description: OK
-          
+
 definitions:
   ContentNode:
     required:
@@ -469,7 +469,7 @@ definitions:
         type: string
       email:
         type: string
-      aviImgUri: 
+      aviImgUri:
         type: string
       reputation:
         type: number
@@ -493,9 +493,9 @@ definitions:
     required:
       - text
     properties:
-      uid: 
+      uid:
         type: string
-      text: 
+      text:
         type: string
   Tags:
     type: array
@@ -537,9 +537,10 @@ definitions:
       message:
         type: string
 
-
+# We only show scheme http, SSL should be handled by
+#
 # Added by API Auto Mocking Plugin
 host: virtserver.swaggerhub.com
 basePath: /isle/1.0.0
 schemes:
- - https
+ - http
