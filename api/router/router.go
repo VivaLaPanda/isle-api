@@ -45,8 +45,10 @@ func ServeAPI(port int, db *dgo.Dgraph) {
 	router.Use(headerMiddleware)
 	router.Handle("/", index()).
 		Methods("GET")
-	router.Handle("/content", handlers.NewContent(db)).
+	router.Handle("/content", handlers.NewContentNode(db)).
 		Methods("POST")
+	router.Handle("/content/{uid}", handlers.ExpandContentNode(db)).
+		Methods("GET")
 	router.NotFoundHandler = http.HandlerFunc(notFound)
 
 	nextRequestID := func() string {

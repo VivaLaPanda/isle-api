@@ -8,12 +8,15 @@ import (
 // ContentNode content node
 type ContentNode struct {
 
+	// title
+	Title string `json:"title,omitempty"`
+
 	// body
 	Body string `json:"body,omitempty"`
 
 	// children
 	// Required: true
-	Children *ContentNode `json:"children,omitempty"`
+	Children []*ContentNode `json:"~parent,omitempty"`
 
 	// created
 	// Required: true
@@ -23,7 +26,7 @@ type ContentNode struct {
 	Edited time.Time `json:"edited"`
 
 	// image Uri
-	ImageURI url.URL `json:"imageUri,omitempty"`
+	ImageURI *url.URL `json:"imageUri,omitempty"`
 
 	// score
 	// Required: true
@@ -36,9 +39,6 @@ type ContentNode struct {
 	// tags
 	Tags []Tag `json:"tags"`
 
-	// title
-	Title string `json:"title,omitempty"`
-
 	// type
 	DgraphType string `json:"dgraph.type,omitempty"`
 
@@ -46,8 +46,13 @@ type ContentNode struct {
 	UID string `json:"uid,omitempty"`
 }
 
-// NewContentNode is a struct designed to handle special parameters for creating a node in DGraph
-type NewContentNode struct {
+// UIDContainer handles the fact that DGraph expects edges to be sub objects, not fields
+type UIDContainer struct {
+	UID string `json:"uid"`
+}
+
+// NewContentNodeNode is a struct designed to handle special parameters for creating a node in DGraph
+type NewContentNodeNode struct {
 	ContentNode
-	ParentUID string `json:"parent"`
+	ParentUID *UIDContainer `json:"parent,omitempty"`
 }

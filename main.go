@@ -11,15 +11,15 @@ import (
 )
 
 // Various runtime flags
-var dbAddress = flag.String("dbAddress", "localhost:9080", "HTTP address of the dgraph database")
-var serverPort = flag.Int("dbAddress", 9090, "Port to run the REST api on")
+var dbAddress = flag.String("dbAddress", "127.0.0.1:9080", "HTTP address of the dgraph database")
+var serverPort = flag.Int("serverPort", 9090, "Port to run the REST api on")
 
 func main() {
 	flag.Parse()
 
 	dbClient := newClient(*dbAddress)
 
-	router.ServeApi(*serverPort, dbClient)
+	router.ServeAPI(*serverPort, dbClient)
 }
 
 func newClient(dbAddress string) *dgo.Dgraph {
