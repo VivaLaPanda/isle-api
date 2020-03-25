@@ -10,7 +10,7 @@ install:
   # Install all external dependencies, ensuring they are updated.
   - go get -u -v $(go list -f '{{join .Imports "\n"}}{{"\n"}}{{join .TestImports "\n"}}' ./... | sort | uniq | grep -v golang-samples)
   # Run Dgraph
-  - docker run --rm -it -p 8000:8000 -p 8080:8080 -p 9080:9080 dgraph/standalone:latest
+  - docker run --rm -p 8000:8000 -p 8080:8080 -p 9080:9080 dgraph/standalone:latest
 
 script:
  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
