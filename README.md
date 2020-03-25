@@ -1,26 +1,14 @@
-# isle-api
+# Isle-API [![](https://godoc.org/github.com/VivaLaPanda/isle-api?status.svg)](http://godoc.org/github.com/VivaLaPanda/isle-api) [![Build Status](https://travis-ci.org/VivaLaPanda/isle-api.svg?branch=master)](https://travis-ci.org/VivaLaPanda/isle-api) [![codecov](https://codecov.io/gh/VivaLaPanda/isle-api/branch/master/graph/badge.svg)](https://codecov.io/gh/VivaLaPanda/isle-api)
 
-Package restapi Isle Network
-This is an API meant to interface with the Isle Network database to serve entities
-to a front-end interface. The reference server is written and Go and the reference client is in Javascript
+This is an API meant to interface with the Isle Network database to serve entities to a front-end interface. The reference server is written and Go and the reference client is in Javascript.
 
-To regenerate server files after a change in the SwaggerFile: `./swagger.exe generate server -A IsleApi -P models.User -f ./swagger.yml`
+Authentication will be handled via Firebase.
 
-confgure_isle.go will not be overwritten.
+## Dependencies
+* Requires a running instance of DGraph
 
-Schemes:
-  https
-BasePath: /api/
-Version: 0.1.1
+## Contributing
+Pull requests are welcome and I'm excited to work with the community on this project.
 
-Consumes:
-- application/json
-
-Produces:
-- application/json
-
-# Certificates
-
-The repo includes some self signed certificates for testing. Feel free to use
-them or not, but DO NOT USE THEM IN PRODUCTION. The key is part of the repository
-and thus the certificate provides no security to you.
+Contribution guidelines are there, but to be honest
+this is a small project, just use common sense.
