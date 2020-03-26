@@ -46,13 +46,8 @@ type ContentNode struct {
 	UID string `json:"uid,omitempty"`
 }
 
-// UIDContainer handles the fact that DGraph expects edges to be sub objects, not fields
-type UIDContainer struct {
-	UID string `json:"uid"`
-}
-
 // NewContentNodeNode is a struct designed to handle special parameters for creating a node in DGraph
 type NewContentNodeNode struct {
 	ContentNode
-	ParentUID *UIDContainer `json:"parent,omitempty"`
+	ParentUID *Edge `json:"parent,omitempty"`
 }

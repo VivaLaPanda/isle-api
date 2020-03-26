@@ -58,7 +58,7 @@ func createNodes() (parentUID, childUID string, err error) {
 		return
 	}
 
-	testChildNode.ParentUID = &models.UIDContainer{UID: parentUID}
+	testChildNode.ParentUID = &models.Edge{UID: parentUID}
 
 	childUID, err = NewContentNode(db, testChildNode)
 

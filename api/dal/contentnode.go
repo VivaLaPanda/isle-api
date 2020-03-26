@@ -8,7 +8,6 @@ import (
 
 	"github.com/VivaLaPanda/isle-api/api/models"
 	"github.com/dgraph-io/dgo"
-	"github.com/dgraph-io/dgo/protos/api"
 )
 
 // NewContentNode creates a new ContentNode based on the provided struct
@@ -17,34 +16,7 @@ func NewContentNode(db *dgo.Dgraph, node models.NewContentNodeNode) (uid string,
 	// Making sure creation time is current
 	node.Created = time.Now()
 
-	// Marshal to json for dgraph
-	dbQuery, err := json.Marshal(node)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Set up transaction
-	txn := db.NewTxn()
-	defer txn.Discard(context.Background())
-
-	// Run the query
-	out, err := txn.Mutate(context.Background(), &api.Mutation{
-		SetJson: dbQuery,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	txn.Commit(context.Background())
-
-	// Put the UID on the node data we're going to return
-	// It's just the first (only) UID in the response
-	for _, value := range out.GetUids() {
-		return value, nil
-	}
-
-	log.Fatal("Mutation didn't return a node")
-	return
+	return Mutator(db, node)
 }
 
 // ExpandContentNode is a function to get the data for a node and its children
@@ -73,9 +45,16 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 	  fragment PostBody {
 		  title
 		  body
+		  created
+		  edited
+		  imageUri
+		  sentiment
+		  score
+		  tags
 		  author {
 			  uid
 			  name
+			  aviImgUri
 		  }
 	}
   `

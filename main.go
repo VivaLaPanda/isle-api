@@ -19,6 +19,7 @@ func main() {
 
 	dbClient := newClient(*dbAddress)
 
+	LoadSchema(dbClient)
 	router.ServeAPI(*serverPort, dbClient)
 }
 
