@@ -35,6 +35,8 @@ func createUser() (roleUID, userUID string, err error) {
 func TestGetUser(t *testing.T) {
 	db := newClient()
 
+	models.LoadSchema(db)
+
 	roleUID, userUID, err := createUser()
 
 	if err != nil {

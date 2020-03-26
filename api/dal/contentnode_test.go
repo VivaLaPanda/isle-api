@@ -52,6 +52,8 @@ var testChildNode models.NewContentNodeNode = models.NewContentNodeNode{
 func createNodes() (parentUID, childUID string, err error) {
 	db := newClient()
 
+	models.LoadSchema(db)
+
 	parentUID, err = NewContentNode(db, testParentNode)
 
 	if err != nil {

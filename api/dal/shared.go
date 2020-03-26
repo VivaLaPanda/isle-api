@@ -9,7 +9,7 @@ import (
 	"github.com/dgraph-io/dgo/protos/api"
 )
 
-// NewUser creates a new User based on the provided struct
+// Mutator is a wrapper to handle DGraph mutations
 func Mutator(db *dgo.Dgraph, structToMutate interface{}) (uid string, err error) {
 	// Handle validation, etc
 

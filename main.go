@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 
+	"github.com/VivaLaPanda/isle-api/api/models"
 	"github.com/VivaLaPanda/isle-api/api/router"
 	"github.com/dgraph-io/dgo"
 	"github.com/dgraph-io/dgo/protos/api"
@@ -19,7 +20,7 @@ func main() {
 
 	dbClient := newClient(*dbAddress)
 
-	LoadSchema(dbClient)
+	models.LoadSchema(dbClient)
 	router.ServeAPI(*serverPort, dbClient)
 }
 
