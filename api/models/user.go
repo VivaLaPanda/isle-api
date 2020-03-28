@@ -40,7 +40,7 @@ type User struct {
 	UID *string `json:"uid,omitempty"`
 
 	// type
-	DgraphType string `json:"dgraph.type,omitempty"`
+	DgraphType []string `json:"dgraph.type,omitempty"`
 }
 
 // // NewContentNodeNode is a struct designed to handle special parameters for creating a node in DGraph
@@ -61,5 +61,5 @@ type Role struct {
 	UID *string `json:"uid,omitempty"`
 
 	// type
-	DgraphType string `json:"dgraph.type,omitempty"`
+	DgraphType []string `json:"dgraph.type,omitempty"`
 }

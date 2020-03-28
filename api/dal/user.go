@@ -1,8 +1,8 @@
 package dal
 
 import (
-	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -26,16 +26,43 @@ func NewRole(db *dgo.Dgraph, role models.Role) (uid string, err error) {
 	return Mutator(db, role)
 }
 
+// GetRole returns a struct with a summary of the information for a role
+func GetRole(db *dgo.Dgraph, uid string) (resp models.Role, err error) {
+	// Construct the query
+	const q = `
+	query GetRole($id: string) {
+		role(func: uid($id)) @filter(type(User)) {
+			text
+			uid
+			dgraph.type
+		}
+	}
+	`
+
+	jsonResp, err := UIDFetcher(db, q, uid)
+
+	// Decode the response
+	var decode struct {
+		Role []models.Role
+	}
+	if err := json.Unmarshal(jsonResp, &decode); err != nil {
+		log.Fatal(err)
+	}
+
+	if len(decode.Role) != 1 {
+		return resp, fmt.Errorf("Query returned %d results, not 1 as expected. Did you query the wrong endpoint?", len(decode.Role))
+	}
+
+	// There's only ever one node
+	return decode.Role[0], nil
+}
+
 // GetUser returns a struct with a summary of the information for a user
 func GetUser(db *dgo.Dgraph, uid string) (resp models.User, err error) {
-	// Set up transaction
-	txn := db.NewReadOnlyTxn()
-	defer txn.Discard(context.Background())
-
 	// Construct the query
 	const q = `
 	query GetUser($id: string) {
-		user(func: uid($id)) {
+		user(func: uid($id)) @filter(type(User)) {
 			uid
 			name
 			email
@@ -43,6 +70,7 @@ func GetUser(db *dgo.Dgraph, uid string) (resp models.User, err error) {
 			reputation
 			spent
 			aviImgUri
+			dgraph.type
 			role {
 				text
 				uid
@@ -66,23 +94,18 @@ func GetUser(db *dgo.Dgraph, uid string) (resp models.User, err error) {
 	}
 	`
 
-	// Make variables map
-	variables := map[string]string{"$id": uid}
-
-	// Run the query
-	out, err := txn.QueryWithVars(context.Background(), q, variables)
-	if err != nil {
-		return resp, err
-	}
-
-	txn.Commit(context.Background())
+	jsonResp, err := UIDFetcher(db, q, uid)
 
 	// Decode the response
 	var decode struct {
 		User []models.User
 	}
-	if err := json.Unmarshal(out.GetJson(), &decode); err != nil {
+	if err := json.Unmarshal(jsonResp, &decode); err != nil {
 		log.Fatal(err)
+	}
+
+	if len(decode.User) != 1 {
+		return resp, fmt.Errorf("Query returned %d results, not 1 as expected. Did you query the wrong endpoint?", len(decode.User))
 	}
 
 	// There's only ever one node

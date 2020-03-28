@@ -11,7 +11,7 @@ var testUser models.User = models.User{
 	Name:       "test-user",
 	Reputation: 0,
 	Spent:      0,
-	DgraphType: "User",
+	DgraphType: []string{"User"},
 	Role:       make([]*models.Role, 1),
 }
 

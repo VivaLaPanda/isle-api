@@ -3,6 +3,7 @@ package dal
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -28,7 +29,7 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 	// Construct the query
 	const q = `
 	query ExpandContentNode($id: string) {
-	  node(func: uid($id)) {
+	  node(func: uid($id)) @filter(type(ContentNode)) {
 		  uid
 		  ...PostBody
 		  ~parent {
@@ -51,6 +52,7 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 		  sentiment
 		  score
 		  tags
+		  dgraph.type
 		  author {
 			  uid
 			  name
@@ -59,23 +61,18 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 	}
   `
 
-	// Make variables map
-	variables := map[string]string{"$id": uid}
-
-	// Run the query
-	out, err := txn.QueryWithVars(context.Background(), q, variables)
-	if err != nil {
-		return resp, err
-	}
-
-	txn.Commit(context.Background())
+	jsonResp, err := UIDFetcher(db, q, uid)
 
 	// Decode the response
 	var decode struct {
 		Node []models.ContentNode
 	}
-	if err := json.Unmarshal(out.GetJson(), &decode); err != nil {
+	if err := json.Unmarshal(jsonResp, &decode); err != nil {
 		log.Fatal(err)
+	}
+
+	if len(decode.Node) != 1 {
+		return resp, fmt.Errorf("Query returned %d results, not 1 as expected. Did you query the wrong endpoint?", len(decode.Node))
 	}
 
 	// There's only ever one node

@@ -33,7 +33,7 @@ var testParentNode models.NewContentNodeNode = models.NewContentNodeNode{
 		Edited:     time.Now(),
 		Score:      0,
 		Sentiment:  1,
-		DgraphType: "ContentNode",
+		DgraphType: []string{"ContentNode"},
 	},
 }
 
@@ -45,7 +45,7 @@ var testChildNode models.NewContentNodeNode = models.NewContentNodeNode{
 		Edited:     time.Now(),
 		Score:      0,
 		Sentiment:  1,
-		DgraphType: "ContentNode",
+		DgraphType: []string{"ContentNode"},
 	},
 }
 

@@ -40,7 +40,7 @@ type ContentNode struct {
 	Tags []Tag `json:"tags"`
 
 	// type
-	DgraphType string `json:"dgraph.type,omitempty"`
+	DgraphType []string `json:"dgraph.type,omitempty"`
 
 	// uid
 	UID string `json:"uid,omitempty"`
