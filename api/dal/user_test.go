@@ -17,12 +17,14 @@ func init() {
 	})
 }
 
+var now = time.Now()
+
 var testUserA models.User = models.User{
 	Email:      "test-a@email.com",
 	Name:       "test-user-a",
 	Reputation: 0,
 	Spent:      0,
-	Joined:     time.Now(),
+	Joined:     &now,
 	DgraphType: []string{"User"},
 	Role:       make([]*models.Role, 1),
 }
@@ -32,7 +34,7 @@ var testUserB models.User = models.User{
 	Name:       "test-user-b",
 	Reputation: 0,
 	Spent:      0,
-	Joined:     time.Now(),
+	Joined:     &now,
 	DgraphType: []string{"User"},
 	Role:       make([]*models.Role, 1),
 }
@@ -106,7 +108,7 @@ func TestGetUser(t *testing.T) {
 		return
 	}
 
-	if userB.InvitedBy[0].Name != userB.Name {
-		t.Errorf("TestGetUser failed, userB.InvitedBy[0].Name != userB.Name: %s != %s", userB.InvitedBy[0].Name, userB.Name)
+	if userB.InvitedBy[0].Name != userA.Name {
+		t.Errorf("TestGetUser failed, userB.InvitedBy[0].Name != userA.Name: %s != %s", userB.InvitedBy[0].Name, userA.Name)
 	}
 }

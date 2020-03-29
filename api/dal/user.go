@@ -13,7 +13,8 @@ import (
 func NewUser(db *dgo.Dgraph, user models.User, inviteCode string) (uid string, err error) {
 	// Handle validation, etc
 	// Making sure creation time is current
-	user.Joined = time.Now()
+	now := time.Now()
+	user.Joined = &now
 
 	if inviteCode == "" {
 		// TODO: Validate that user is an admin
