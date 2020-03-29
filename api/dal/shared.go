@@ -16,7 +16,7 @@ func Mutator(db *dgo.Dgraph, structToMutate interface{}) (uid string, err error)
 	// Marshal to json for dgraph
 	dbQuery, err := json.Marshal(structToMutate)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
 	// Set up transaction
@@ -42,14 +42,14 @@ func Mutator(db *dgo.Dgraph, structToMutate interface{}) (uid string, err error)
 	return
 }
 
-// UIDFetcher is a genericized function to wrap queries for a node by UID
-func UIDFetcher(db *dgo.Dgraph, q string, uid string) (resp []byte, err error) {
+// SimpleQuery is a genericized function to wrap queries for a node by UID
+func SimpleQuery(db *dgo.Dgraph, q string, match string) (resp []byte, err error) {
 	// Set up transaction
 	txn := db.NewReadOnlyTxn()
 	defer txn.Discard(context.Background())
 
 	// Make variables map
-	variables := map[string]string{"$id": uid}
+	variables := map[string]string{"$match": match}
 
 	// Run the query
 	out, err := txn.QueryWithVars(context.Background(), q, variables)

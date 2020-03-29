@@ -28,8 +28,8 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 
 	// Construct the query
 	const q = `
-	query ExpandContentNode($id: string) {
-	  node(func: uid($id)) @filter(type(ContentNode)) {
+	query ExpandContentNode($match: string) {
+	  node(func: uid($match)) @filter(type(ContentNode)) {
 		  uid
 		  ...PostBody
 		  ~parent {
@@ -61,7 +61,7 @@ func ExpandContentNode(db *dgo.Dgraph, uid string) (resp models.ContentNode, err
 	}
   `
 
-	jsonResp, err := UIDFetcher(db, q, uid)
+	jsonResp, err := SimpleQuery(db, q, uid)
 
 	// Decode the response
 	var decode struct {

@@ -20,24 +20,24 @@ type ContentNode struct {
 
 	// created
 	// Required: true
-	Created time.Time `json:"created"`
+	Created time.Time `json:"created,omitempty"`
 	// edited
 	// Required: true
-	Edited time.Time `json:"edited"`
+	Edited time.Time `json:"edited,omitempty"`
 
 	// image Uri
 	ImageURI *url.URL `json:"imageUri,omitempty"`
 
 	// score
 	// Required: true
-	Score float64 `json:"score"`
+	Score float64 `json:"score,omitempty"`
 
 	// sentiment
 	// Required: true
-	Sentiment float64 `json:"sentiment"`
+	Sentiment float64 `json:"sentiment,omitempty"`
 
 	// tags
-	Tags []Tag `json:"tags"`
+	Tags []Tag `json:"tags,omitempty"`
 
 	// type
 	DgraphType []string `json:"dgraph.type,omitempty"`

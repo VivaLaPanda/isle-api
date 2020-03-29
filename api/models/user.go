@@ -8,33 +8,33 @@ type User struct {
 	AviImgURI *string `json:"aviImgUri,omitempty"`
 
 	// commented
-	Posted []ContentNode `json:"~author"`
+	Posted []ContentNode `json:"~author,omitempty"`
 
 	// email
 	// Required: true
-	Email string `json:"email"`
+	Email string `json:"email,omitempty"`
 
 	// invited by
-	InvitedBy *User `json:"invitedBy,omitempty"`
+	InvitedBy []*User `json:"invitedBy,omitempty"`
 
 	// joined
 	// Required: true
-	Joined time.Time `json:"joined"`
+	Joined *time.Time `json:"joined,omitempty"`
 
 	// name
 	// Required: true
-	Name string `json:"name"`
+	Name string `json:"name,omitempty"`
 
 	// reputation
 	// Required: true
-	Reputation float64 `json:"reputation"`
+	Reputation float64 `json:"reputation,omitempty"`
 
 	// role
 	// Required: true
-	Role []*Role `json:"role"`
+	Role []*Role `json:"role,omitempty"`
 
 	// spent
-	Spent float64 `json:"spent"`
+	Spent float64 `json:"spent,omitempty"`
 
 	// uid
 	UID *string `json:"uid,omitempty"`
@@ -55,7 +55,24 @@ type Role struct {
 
 	// text
 	// Required: true
-	Text string `json:"text"`
+	Text string `json:"text,omitempty"`
+
+	// uid
+	UID *string `json:"uid,omitempty"`
+
+	// type
+	DgraphType []string `json:"dgraph.type,omitempty"`
+}
+
+// Invite invite
+// swagger:model Invite
+type Invite struct {
+
+	// code
+	Code string `json:"code,omitempty"`
+
+	// created by
+	CreatedBy *User `json:"createdBy,omitempty"`
 
 	// uid
 	UID *string `json:"uid,omitempty"`
